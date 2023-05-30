@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var nch = require("../src/NegClustHelperFcts");
+var d = new nch.CwObjectCollection([[0, 3], [5, 8], [10, 13], [14, 17]], 3, 4);
+var sms = d.Sigma().Sigma().Sigma().Sigma().Sigma().Sigma().Sigma().Sigma();
+var A = sms.extensionClose();
+var kQ = nch.pathAlgebra(sms);
+console.log("SMS", sms);
+console.log("sigma squared SMS", sms.Sigma().Sigma());
+console.log("ALG", A);
+console.log("kQ", kQ);
+console.log(sms.isSimpleMindedSystem());
+console.log(nch.isEn(sms, 2));
+console.log(nch.ext2Agree(sms));

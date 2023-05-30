@@ -1,0 +1,20 @@
+{
+"compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "outDir": "build"
+},
+"include": [
+    "**/*"
+],
+"exclude": [
+    "experiments",
+    "tests",
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+]}
