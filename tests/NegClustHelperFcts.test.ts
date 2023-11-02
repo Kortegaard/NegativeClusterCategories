@@ -4,7 +4,10 @@ describe('Testing Negative Cluster Category Functions', () => {
 
   test('Sigma', () => {
     expect(nch.Sigma([1,2], 5)).toEqual([2,3]);
+    expect(nch.Sigma([1,2], 5, 2)).toEqual([3,4]);
+    expect(nch.Sigma([1,2], 5,-1)).toEqual([0,1]);
     expect(nch.Sigma([3,4], 5)).toEqual([0,4]);
+    expect(nch.Sigma([3,4], 5,-1)).toEqual([2,3]);
     expect(nch.Sigma([3,10], 13)).toEqual([4,11]);
     expect(nch.Sigma([3,12], 13)).toEqual([0,4]);
   });

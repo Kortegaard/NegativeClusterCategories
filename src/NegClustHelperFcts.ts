@@ -12,7 +12,7 @@ export function Sigma(s:any[], N:number, power:number = 1){
     if(power === undefined){
         power = 1
     }
-    const n: number[] = [(s[0]+1) % N, (s[1]+power) % N];
+    const n: number[] = [(s[0]+power) % N, (s[1]+power) % N];
     if(n[0]<n[1]){return n}
     return [n[1], n[0]];
 }
@@ -316,6 +316,7 @@ export class CwObjectCollection{
         return a;
     }
 
+    // MUTATE
     //st torsionfree class
     mutate(torsionFree:CwObjectCollection){
         // torsion = ^perp st = leftperp(st)
@@ -355,6 +356,7 @@ export function intersection(A: CwObjectCollection, B: CwObjectCollection){
     }
     let a: CwObjectCollection = new CwObjectCollection(collectedObjs, A.w, A.e);
     return a;
+
 }
 
 export function union(A: CwObjectCollection, B: CwObjectCollection){
@@ -378,6 +380,7 @@ export function collectionEqual(A: CwObjectCollection, B: CwObjectCollection){
     return A.containsSet(B.objectList) && B.containsSet(A.objectList);
 }
 
+// Compute A * B
 export function extension(A: CwObjectCollection, B: CwObjectCollection){
     let a: CwObjectCollection | null = union(A, B);
     if(a === null){ return null; }
@@ -385,6 +388,7 @@ export function extension(A: CwObjectCollection, B: CwObjectCollection){
     for(let x of A.objectList){
         for(let y of B.objectList){
             if(objectEqual(x,y)){ continue; }
+            // Find e's such that: x ---> e ---> y, or rather a ---> e ---> b
             let e = ext(y, x, A.w, A.N);
             for(let z of e){
                 if(!a.contains(z)){ a.add(z); }
@@ -576,7 +580,7 @@ function* elements() {
 
 // Arrows 0 indexes
 export function qpa(numVertices:number, arrows:number[][], ideal:number[][]){
-    let out: string = "Read(\"./setup.g\");\n";
+    let out: string = "(\"./SupportTauTiltingMutation.g\");\n";
     let arrString: string = "[" + arrows.map((d,i)=> "["+d.map(b=>(b+1)).toString() + ", \"a"+ i + "\"]").toString() + "]";
     out += "Q := Quiver(" + numVertices + ", " + arrString + ");\n";
     out += "kQ := PathAlgebra(GF(3), Q);\n"

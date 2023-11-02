@@ -52,7 +52,7 @@ function Sigma(s, N, power) {
     if (power === undefined) {
         power = 1;
     }
-    var n = [(s[0] + 1) % N, (s[1] + power) % N];
+    var n = [(s[0] + power) % N, (s[1] + power) % N];
     if (n[0] < n[1]) {
         return n;
     }
@@ -379,6 +379,7 @@ var CwObjectCollection = /** @class */ (function () {
         }
         return a;
     };
+    // MUTATE
     //st torsionfree class
     CwObjectCollection.prototype.mutate = function (torsionFree) {
         // torsion = ^perp st = leftperp(st)
@@ -441,6 +442,7 @@ function collectionEqual(A, B) {
     return A.containsSet(B.objectList) && B.containsSet(A.objectList);
 }
 exports.collectionEqual = collectionEqual;
+// Compute A * B
 function extension(A, B) {
     var a = union(A, B);
     if (a === null) {
@@ -453,6 +455,7 @@ function extension(A, B) {
             if (objectEqual(x, y)) {
                 continue;
             }
+            // Find e's such that: x ---> e ---> y, or rather a ---> e ---> b
             var e = ext(y, x, A.w, A.N);
             for (var _e = 0, e_2 = e; _e < e_2.length; _e++) {
                 var z = e_2[_e];
@@ -664,7 +667,7 @@ function elements() {
 }
 // Arrows 0 indexes
 function qpa(numVertices, arrows, ideal) {
-    var out = "Read(\"./setup.g\");\n";
+    var out = "(\"./SupportTauTiltingMutation.g\");\n";
     var arrString = "[" + arrows.map(function (d, i) { return "[" + d.map(function (b) { return (b + 1); }).toString() + ", \"a" + i + "\"]"; }).toString() + "]";
     out += "Q := Quiver(" + numVertices + ", " + arrString + ");\n";
     out += "kQ := PathAlgebra(GF(3), Q);\n";
