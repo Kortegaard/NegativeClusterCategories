@@ -41,7 +41,7 @@ nch.setVerbose(true);
 //let d = new nch.CwObjectCollection([ [ 0, 3 ], [ 4, 11 ], [ 5, 8 ], [ 12, 15 ]], 3,4);
 var w = 5;
 var e = 6;
-test(w, e, 5);
+test(w, e, 1);
 function test(w, e, number) {
     return __awaiter(this, void 0, void 0, function () {
         var _loop_1, _k;
@@ -50,7 +50,7 @@ function test(w, e, number) {
             switch (_a.label) {
                 case 0:
                     _loop_1 = function (_k) {
-                        var d, alg, p, foundone, i, en, alg1, sAlg, s2, pa_alg, error_1;
+                        var d, alg, p, foundone, i, en, alg1, sAlg, s2, pa_alg;
                         return __generator(this, function (_b) {
                             switch (_b.label) {
                                 case 0:
@@ -68,6 +68,9 @@ function test(w, e, number) {
                                             break;
                                         }
                                     }
+                                    d = new nch.CwObjectCollection([[0, 17], [1, 6], [7, 12], [18, 23], [24, 35], [25, 30]], w, e);
+                                    alg = d.extensionClose();
+                                    p = nch.pathAlgebraFromPasc(alg);
                                     console.log("FOUND? ", foundone);
                                     en = 4;
                                     alg1 = alg;
@@ -91,9 +94,7 @@ function test(w, e, number) {
                                     console.log("pasc:\t", pa_alg);
                                     //console.log("Path Algebra:\t",alg)
                                     console.log("------------");
-                                    _b.label = 1;
-                                case 1:
-                                    _b.trys.push([1, 3, , 4]);
+                                    //try {
                                     return [4 /*yield*/, nch.qpaTorsionClasses(d)
                                             .then(function (s) { return __awaiter(_this, void 0, void 0, function () {
                                             var n, _loop_2, _i, _a, f;
@@ -102,7 +103,7 @@ function test(w, e, number) {
                                                     case 0:
                                                         n = -1;
                                                         _loop_2 = function (f) {
-                                                            var c, c_alg, c_alg_sms, error_2;
+                                                            var c, c_alg, c_alg_sms, error_1;
                                                             return __generator(this, function (_c) {
                                                                 switch (_c.label) {
                                                                     case 0:
@@ -210,9 +211,9 @@ function test(w, e, number) {
                                                                         _c.sent();
                                                                         return [3 /*break*/, 4];
                                                                     case 3:
-                                                                        error_2 = _c.sent();
-                                                                        console.log("*Something went wrong");
-                                                                        console.log(error_2);
+                                                                        error_1 = _c.sent();
+                                                                        console.log("*Something went wrong 2");
+                                                                        console.log(error_1);
                                                                         return [3 /*break*/, 4];
                                                                     case 4: return [2 /*return*/];
                                                                 }
@@ -234,15 +235,10 @@ function test(w, e, number) {
                                                 }
                                             });
                                         }); })];
-                                case 2:
+                                case 1:
+                                    //try {
                                     _b.sent();
-                                    return [3 /*break*/, 4];
-                                case 3:
-                                    error_1 = _b.sent();
-                                    console.log("*Something went wrong");
-                                    console.log(error_1);
-                                    return [3 /*break*/, 4];
-                                case 4: return [2 /*return*/];
+                                    return [2 /*return*/];
                             }
                         });
                     };

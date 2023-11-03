@@ -840,7 +840,9 @@ function dimensionVectorToObject(sms, dimensionvect) {
 }
 exports.dimensionVectorToObject = dimensionVectorToObject;
 function qpaTorsionClasses(sms) {
-    var A = pathAlgebra(sms);
+    //let A = pathAlgebra(sms);
+    var alg = sms.extensionClose();
+    var A = pathAlgebraFromPasc(alg);
     var numVertices = sms.e;
     var arrows = A[0];
     var ideal = A[1];

@@ -6,7 +6,7 @@ nch.setVerbose(true);
 let w = 5
 let e = 6
 
-test(w,e, 5)
+test(w,e, 1)
 
 async function test(w, e, number){
     for(let _k = 0; _k < number; _k++){
@@ -25,6 +25,9 @@ async function test(w, e, number){
                 break
             }
         }
+        d = new nch.CwObjectCollection([ [ 0, 17 ], [ 1, 6 ], [ 7, 12 ], [ 18, 23 ], [ 24, 35 ], [ 25, 30 ] ], w, e)
+        alg = d.extensionClose();
+        p = nch.pathAlgebraFromPasc(alg) as any[];
         console.log("FOUND? ", foundone)
         let en = 4
         let alg1 = alg
@@ -49,7 +52,7 @@ async function test(w, e, number){
         console.log("pasc:\t",pa_alg)
         //console.log("Path Algebra:\t",alg)
         console.log("------------");
-        try {
+        //try {
             await nch.qpaTorsionClasses(d)
             .then(async s=>{
                 //up to 35
@@ -158,15 +161,15 @@ async function test(w, e, number){
                             }
                         });
                     } catch (error) {
-                        console.log("*Something went wrong")
+                        console.log("*Something went wrong 2")
                         console.log(error)
                     }
                 }
             });
-        }catch(error){
-            console.log("*Something went wrong")
-            console.log(error)
-        }
+        //}catch(error){
+        //    console.log("*Something went wrong 1")
+        //    console.log(error)
+        //}
     }
 }
 

@@ -749,7 +749,9 @@ export function dimensionVectorToObject(sms:CwObjectCollection, dimensionvect:nu
 
 export function qpaTorsionClasses(sms:CwObjectCollection): Promise<any> {
 
-    let A = pathAlgebra(sms);
+    //let A = pathAlgebra(sms);
+    let alg = sms.extensionClose()
+    let A = pathAlgebraFromPasc(alg) as any[];
 
     let numVertices:number = sms.e;
     let arrows:number[][] = A![0];
