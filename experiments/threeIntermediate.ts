@@ -6,7 +6,7 @@ let amount = 0;
 let j = 0;
 let w = 5
 let e = 4
-for(let i = 0; i < 1000000; i++){
+    for(let i = 0; i < 1000000; i++){
     let d1 = nch.randomSimpleMindedSystem(w,e);
     let d2 = nch.randomSimpleMindedSystem(w,e);
     

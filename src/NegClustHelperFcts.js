@@ -36,8 +36,8 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 exports.__esModule = true;
-exports.ext2Agree = exports.isEn = exports.randomSimpleMindedSystem = exports.qpaTorsionClasses = exports.dimensionVectorToObject = exports.qpa = exports.generateIndecomposables = exports.pathAlgebra = exports.pathAlgebraOld = exports.extension = exports.collectionEqual = exports.union = exports.intersection = exports.CwObjectCollection = exports.rightPerpInCollection = exports.leftPerpInCollection = exports.objectEqual = exports.ext = exports.getDiagonalDifferenece = exports.isHomBetweenCollections = exports.isWDiagonal = exports.getSharedEndpoint = exports.isCrossing = exports.homDim = exports.Ndist = exports.isNOrdered = exports.Sigma = exports.setVerbose = exports.verbose = void 0;
-exports.verbose = false;
+exports.ext2Agree = exports.isEn = exports.randomSimpleMindedSystem = exports.qpaTorsionClasses = exports.dimensionVectorToObject = exports.qpa = exports.generateIndecomposables = exports.pathAlgebra = exports.pathAlgebraFromPasc = exports.pathAlgebraOld = exports.extension = exports.collectionEqual = exports.union = exports.intersection = exports.filtSub = exports.filtGen = exports.CwObjectCollection = exports.rightPerpInCollection = exports.leftPerpInCollection = exports.objectEqual = exports.ext = exports.getDiagonalDifferenece = exports.isHomBetweenCollections = exports.isWDiagonal = exports.getSharedEndpoint = exports.isCrossing = exports.homDim = exports.Ndist = exports.isNOrdered = exports.Sigma = exports.setVerbose = exports.verbose = void 0;
+exports.verbose = true;
 function setVerbose(val) { exports.verbose = val; }
 exports.setVerbose = setVerbose;
 /**
@@ -256,15 +256,18 @@ function leftPerpInCollection(set, inColl) {
     var perp = [];
     for (var _a = 0, _b = inColl.objectList; _a < _b.length; _a++) {
         var collElem = _b[_a];
-        for (var _c = 0, _d = inColl.objectList; _c < _d.length; _c++) {
+        var is_zero = true;
+        for (var _c = 0, _d = set.objectList; _c < _d.length; _c++) {
             var setElem = _d[_c];
             if (homDim(collElem, setElem, inColl.w, inColl.e) > 0) {
-                continue;
+                is_zero = false;
             }
         }
-        perp.push(collElem);
+        if (is_zero) {
+            perp.push(collElem);
+        }
     }
-    return perp;
+    return new CwObjectCollection(perp, inColl.w, inColl.e);
 }
 exports.leftPerpInCollection = leftPerpInCollection;
 // Set^perp
@@ -272,15 +275,18 @@ function rightPerpInCollection(set, inColl) {
     var perp = [];
     for (var _a = 0, _b = inColl.objectList; _a < _b.length; _a++) {
         var collElem = _b[_a];
-        for (var _c = 0, _d = inColl.objectList; _c < _d.length; _c++) {
+        var is_zero = true;
+        for (var _c = 0, _d = set.objectList; _c < _d.length; _c++) {
             var setElem = _d[_c];
             if (homDim(setElem, collElem, inColl.w, inColl.e) > 0) {
-                continue;
+                is_zero = false;
             }
         }
-        perp.push(collElem);
+        if (is_zero) {
+            perp.push(collElem);
+        }
     }
-    return perp;
+    return new CwObjectCollection(perp, inColl.w, inColl.e);
 }
 exports.rightPerpInCollection = rightPerpInCollection;
 var CwObjectCollection = /** @class */ (function () {
@@ -379,11 +385,11 @@ var CwObjectCollection = /** @class */ (function () {
         }
         return a;
     };
-    // MUTATE
-    //st torsionfree class
+    // todo: rewrite to proper mutate
+    //st torsionfree class 
     CwObjectCollection.prototype.mutate = function (torsionFree) {
         // torsion = ^perp st = leftperp(st)
-        var torsion = new CwObjectCollection(leftPerpInCollection(torsionFree.objectList, this), this.w, this.e);
+        var torsion = leftPerpInCollection(torsionFree, this);
         //let a: CwObjectCollection = new CwObjectCollection([], this.w, this.e);
         // for(let ob of this.objectList){
         //if(!st.contains(ob)){
@@ -392,6 +398,10 @@ var CwObjectCollection = /** @class */ (function () {
         //a.add(Sigma(ob, this.N) as [number, number]);
         //}
         //}
+        return extension(torsionFree.Sigma(), torsion);
+    };
+    CwObjectCollection.prototype.tilt = function (torsionFree) {
+        var torsion = leftPerpInCollection(torsionFree, this);
         return extension(torsionFree.Sigma(), torsion);
     };
     CwObjectCollection.prototype.Sigma = function (power) {
@@ -406,12 +416,20 @@ var CwObjectCollection = /** @class */ (function () {
     return CwObjectCollection;
 }());
 exports.CwObjectCollection = CwObjectCollection;
+function filtGen(set, alg) {
+    return leftPerpInCollection(rightPerpInCollection(set, alg), alg);
+}
+exports.filtGen = filtGen;
+function filtSub(set, alg) {
+    return rightPerpInCollection(leftPerpInCollection(set, alg), alg);
+}
+exports.filtSub = filtSub;
 function intersection(A, B) {
     if (A.w != B.w || A.e != B.e) {
         console.warn("Collection doesn't compare");
         return null;
     }
-    var collectedObjs = A.objectList;
+    var collectedObjs = [];
     for (var _a = 0, _b = A.objectList; _a < _b.length; _a++) {
         var v = _b[_a];
         if (B.contains(v)) {
@@ -555,6 +573,111 @@ function pathAlgebraOld(sms) {
     return [arrows, ideal];
 }
 exports.pathAlgebraOld = pathAlgebraOld;
+function pathAlgebraFromPasc(pasc) {
+    // We can find potential projectives as objects with no extensions out
+    var potentialProjectives = [];
+    // Finding projectives
+    for (var _i = 0; _i < pasc.objectList.length; _i++) {
+        //const ob = new CwObjectCollection([pasc.objectList[_i]], pasc.w, pasc.e)
+        var are_ext_out = false;
+        for (var _j = 0; _j < pasc.objectList.length; _j++) {
+            var exts = ext(pasc.objectList[_i], pasc.objectList[_j], pasc.w, pasc.N);
+            if (exts.length > 0) {
+                are_ext_out = true;
+                break;
+            }
+        }
+        if (are_ext_out) {
+            continue;
+        }
+        potentialProjectives.push(pasc.objectList[_i]);
+    }
+    //finding arrows
+    var arrows = [];
+    for (var _i = 0; _i < potentialProjectives.length; _i++) {
+        for (var _j = 0; _j < potentialProjectives.length; _j++) {
+            if (_i == _j) {
+                continue;
+            }
+            var hd_i_j = homDim(potentialProjectives[_i], potentialProjectives[_j], pasc.w, pasc.e);
+            if (hd_i_j > 0) {
+                var factors = false;
+                for (var _k = 0; _k < potentialProjectives.length; _k++) {
+                    if (_k == _i || _k == _j) {
+                        continue;
+                    }
+                    var hd_i_k = homDim(potentialProjectives[_i], potentialProjectives[_k], pasc.w, pasc.e);
+                    var hd_k_j = homDim(potentialProjectives[_k], potentialProjectives[_j], pasc.w, pasc.e);
+                    if (hd_i_k > 0 && hd_k_j > 0) {
+                        factors = true;
+                        break;
+                    }
+                }
+                if (!factors) {
+                    arrows.push([_j, _i]);
+                }
+            }
+        }
+    }
+    //finding Zero relations
+    var compositions = [];
+    var curr_index = 0;
+    var ideal = [];
+    // Add initiial arrows
+    for (var i = 0; i < arrows.length; i++) {
+        compositions.push([i]);
+    }
+    while (curr_index < compositions.length) {
+        for (var i = 0; i < arrows.length; i++) {
+            // Making sure composition is possible , x --f--> y --g--> z , gives  P(x) <--p(f)-- p(y) <--p(g)-- p(z)
+            if (arrows[compositions[curr_index][compositions[curr_index].length - 1]][1] != arrows[i][0]) {
+                continue;
+            }
+            var x_index = arrows[compositions[curr_index][compositions[curr_index].length - 1]][0];
+            var y_index = arrows[compositions[curr_index][compositions[curr_index].length - 1]][1];
+            var z_index = arrows[i][1];
+            var x = potentialProjectives[x_index];
+            var z = potentialProjectives[z_index];
+            var comp_homdim = homDim(z, x, pasc.w, pasc.e);
+            if (comp_homdim == 0) {
+                ideal.push(__spreadArray(__spreadArray([], compositions[curr_index], true), [i], false));
+            }
+            else {
+                //compositions[curr_index].push(i)
+                compositions.push(__spreadArray(__spreadArray([], compositions[curr_index], true), [i], false));
+            }
+        }
+        curr_index += 1;
+    }
+    // Finding the corresponding simples
+    // There will be a simple for each projective,
+    // and it will be the objects that has arrows from one and only that corresponding projective
+    // todo: I think the above is true
+    //This can be improved, but something fast for proof of concept
+    var proj_corresponding_simples = {};
+    for (var i = 0; i < pasc.objectList.length; i++) {
+        var has_morphisms_from = [];
+        for (var j = 0; j < potentialProjectives.length; j++) {
+            var hd = homDim(potentialProjectives[j], pasc.objectList[i], pasc.w, pasc.e);
+            if (hd > 0) {
+                has_morphisms_from.push(j);
+            }
+        }
+        if (has_morphisms_from.length == 1) {
+            if (has_morphisms_from[0] in proj_corresponding_simples) {
+                console.log("something wrong here");
+            }
+            proj_corresponding_simples[has_morphisms_from[0]] = pasc.objectList[i];
+        }
+    }
+    var sms_objects = [];
+    for (var a in proj_corresponding_simples) {
+        sms_objects.push(proj_corresponding_simples[a]);
+    }
+    var sms = new CwObjectCollection(sms_objects, pasc.w, pasc.e);
+    return [arrows, ideal, sms];
+}
+exports.pathAlgebraFromPasc = pathAlgebraFromPasc;
 function pathAlgebra(sms) {
     if (!sms.isSimpleMindedSystem()) {
         return null;
@@ -667,7 +790,7 @@ function elements() {
 }
 // Arrows 0 indexes
 function qpa(numVertices, arrows, ideal) {
-    var out = "(\"./SupportTauTiltingMutation.g\");\n";
+    var out = "Read(\"./SupportTauTiltingMutation.g\");\n";
     var arrString = "[" + arrows.map(function (d, i) { return "[" + d.map(function (b) { return (b + 1); }).toString() + ", \"a" + i + "\"]"; }).toString() + "]";
     out += "Q := Quiver(" + numVertices + ", " + arrString + ");\n";
     out += "kQ := PathAlgebra(GF(3), Q);\n";
@@ -729,7 +852,7 @@ function qpaTorsionClasses(sms) {
     var resArr = [];
     return new Promise(function (resolve) {
         //let qpaCode = "cd /mnt/c/Users/ander/OneDrive/Dokumenter/Code/GAP-QPA/scripts && gap --nointeract -b -c '" + mystr +"'";
-        var qpaCode = "cd /Users/ank/master/drive/QPA/scripts && gap --nointeract -b -c '\n" + mystr + "'";
+        var qpaCode = "cd /Users/ank/master/drive/code/qpa_scripts && gap --nointeract -b -c '\n" + mystr + "'";
         if (exports.verbose) {
             console.log("* Calling QPA code:");
             console.log(qpaCode);

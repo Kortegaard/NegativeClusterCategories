@@ -21,6 +21,8 @@ _hd	src/NegClustHelperFcts.js	/^    var _hd = 0;$/;"	V
 _loop_1	experiments/ext2.js	/^var _loop_1 = function (i) {$/;"	F
 _loop_1	experiments/mutation.js	/^var _loop_1 = function (i) {$/;"	F
 _loop_1	experiments/new.js	/^var _loop_1 = function (i) {$/;"	F
+_loop_1	experiments/test2.js	/^    var _loop_1 = function (f) {$/;"	F
+_loop_1	experiments/tilting.js	/^var _loop_1 = function (i) {$/;"	F
 a	src/NegClustHelperFcts.js	/^        var a = new CwObjectCollection([], this.w, this.e);$/;"	V
 a	src/NegClustHelperFcts.js	/^        var a = new CwObjectCollection(this.objectList, this.w, this.e);$/;"	V
 a	src/NegClustHelperFcts.js	/^    var a = new CwObjectCollection(collectedObjs, A.w, A.e);$/;"	V
@@ -29,6 +31,7 @@ add	src/NegClustHelperFcts.js	/^    CwObjectCollection.prototype.add = function 
 amount	experiments/threeIntermediate.js	/^var amount = 0;$/;"	V
 arrString	src/NegClustHelperFcts.js	/^    var arrString = "[" + arrows.map(function (d, i) { return "[" + d.map(function (b) { return (b + 1); }).toString() + ", \\"a" + i + "\\"]"; }).toString() + "]";$/;"	V
 arrows	src/NegClustHelperFcts.js	/^    var arrows = [];$/;"	A
+collectedObjs	src/NegClustHelperFcts.js	/^    var collectedObjs = [];$/;"	A
 collectionEqual	src/NegClustHelperFcts.js	/^function collectionEqual(A, B) {$/;"	F
 collectionEqual	src/NegClustHelperFcts.ts	/^export function collectionEqual(A: CwObjectCollection, B: CwObjectCollection){$/;"	f
 composition_module	src/NegClustHelperFcts.js	/^    var composition_module = [];$/;"	A
@@ -36,14 +39,19 @@ compositions	src/NegClustHelperFcts.js	/^    var compositions = [];$/;"	A
 contains	src/NegClustHelperFcts.js	/^    CwObjectCollection.prototype.contains = function (obj) {$/;"	M
 containsSet	src/NegClustHelperFcts.js	/^    CwObjectCollection.prototype.containsSet = function (objs) {$/;"	M
 currIndex	src/NegClustHelperFcts.js	/^    var currIndex = 0;$/;"	V
+curr_index	src/NegClustHelperFcts.js	/^    var curr_index = 0;$/;"	V
 d	experiments/article.js	/^var d = new nch.CwObjectCollection([[0, 3], [4, 11], [5, 8], [12, 15]], 3, 4);$/;"	V
 d	experiments/test.js	/^var d = new nch.CwObjectCollection([[0, 3], [5, 8], [10, 13], [14, 17]], 3, 4);$/;"	V
 dimensionVectorToObject	src/NegClustHelperFcts.js	/^function dimensionVectorToObject(sms, dimensionvect) {$/;"	F
 dimensionVectorToObject	src/NegClustHelperFcts.ts	/^export function dimensionVectorToObject(sms:CwObjectCollection, dimensionvect:number[]){$/;"	f
 e	experiments/ext2.js	/^    var e = 4;$/;"	V
+e	experiments/test2.js	/^var e = 4;$/;"	V
+e	experiments/threeIntermediate.js	/^var e = 4;$/;"	V
 elements	src/NegClustHelperFcts.js	/^function elements() {$/;"	F
-en	experiments/threeIntermediate.js	/^    var en = 2;$/;"	V
+en	experiments/test2.js	/^var en = 4;$/;"	V
+en	experiments/threeIntermediate.js	/^    var en = 5;$/;"	V
 exec	src/NegClustHelperFcts.js	/^        exec(qpaCode, function (error, stdout, stderr) {$/;"	M
+exports	jest.config.js	/^module.exports = {$/;"	P
 ext	src/NegClustHelperFcts.js	/^function ext(c, a, w, N) {$/;"	F
 ext	src/NegClustHelperFcts.ts	/^export function ext(c: [number, number], a:[number, number], w:number, N:number){$/;"	f
 ext2Agree	src/NegClustHelperFcts.js	/^function ext2Agree(sms) {$/;"	F
@@ -51,6 +59,10 @@ ext2Agree	src/NegClustHelperFcts.ts	/^export function ext2Agree(sms: CwObjectCol
 extension	src/NegClustHelperFcts.js	/^function extension(A, B) {$/;"	F
 extension	src/NegClustHelperFcts.ts	/^export function extension(A: CwObjectCollection, B: CwObjectCollection){$/;"	f
 extensionClose	src/NegClustHelperFcts.js	/^    CwObjectCollection.prototype.extensionClose = function () {$/;"	M
+filtGen	src/NegClustHelperFcts.js	/^function filtGen(set, alg) {$/;"	F
+filtGen	src/NegClustHelperFcts.ts	/^export function filtGen(set: CwObjectCollection, alg: CwObjectCollection){$/;"	f
+filtSub	src/NegClustHelperFcts.js	/^function filtSub(set, alg) {$/;"	F
+filtSub	src/NegClustHelperFcts.ts	/^export function filtSub(set: CwObjectCollection, alg: CwObjectCollection){$/;"	f
 find	src/NegClustHelperFcts.js	/^    CwObjectCollection.prototype.find = function (obj) {$/;"	M
 findIndex	experiments/article.js	/^function findIndex(obj) {$/;"	F
 findIndex	experiments/article.ts	/^function findIndex(obj: [number, number]){$/;"	f
@@ -61,6 +73,7 @@ getRndInteger	src/NegClustHelperFcts.js	/^    function getRndInteger(min, max) {
 getRndInteger	src/NegClustHelperFcts.ts	/^    function getRndInteger(min: number, max: number) {$/;"	f
 getSharedEndpoint	src/NegClustHelperFcts.js	/^function getSharedEndpoint(a, b) {$/;"	F
 getSharedEndpoint	src/NegClustHelperFcts.ts	/^export function getSharedEndpoint(a: any[], b: any[]){$/;"	f
+has_morphisms_from	src/NegClustHelperFcts.js	/^        var has_morphisms_from = [];$/;"	A
 helper	src/NegClustHelperFcts.js	/^    function helper(start, end, first) {$/;"	F
 helper	src/NegClustHelperFcts.ts	/^    function helper(start:number, end:number, first:boolean):[number, number][]{$/;"	f
 homDim	src/NegClustHelperFcts.js	/^function homDim(s1, s2, w, e) {$/;"	F
@@ -85,25 +98,31 @@ isWDiagonal	src/NegClustHelperFcts.ts	/^export function isWDiagonal(a: any[], w:
 j	experiments/threeIntermediate.js	/^var j = 0;$/;"	V
 j	src/NegClustHelperFcts.js	/^    var N, i, j, add;$/;"	V
 leftPerpInCollection	src/NegClustHelperFcts.js	/^function leftPerpInCollection(set, inColl) {$/;"	F
-leftPerpInCollection	src/NegClustHelperFcts.ts	/^export function leftPerpInCollection(set:[number, number][], inColl:CwObjectCollection){$/;"	f
+leftPerpInCollection	src/NegClustHelperFcts.ts	/^export function leftPerpInCollection(set:CwObjectCollection, inColl:CwObjectCollection){$/;"	f
 maxAmount	experiments/article.js	/^var maxAmount = [];$/;"	A
 maxAmount	experiments/mutation.js	/^var maxAmount = [];$/;"	A
 maxAmount	experiments/new.js	/^var maxAmount = [];$/;"	A
 maxAmount	experiments/threeIntermediate.js	/^var maxAmount = [];$/;"	A
+maxAmount	experiments/tilting.js	/^var maxAmount = [];$/;"	A
+moduleFileExtensions	jest.config.js	/^  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],$/;"	P
 mutate	src/NegClustHelperFcts.js	/^    CwObjectCollection.prototype.mutate = function (torsionFree) {$/;"	M
 n	src/NegClustHelperFcts.js	/^    var n = [(s[0] + power) % N, (s[1] + power) % N];$/;"	A
 objectEqual	src/NegClustHelperFcts.js	/^function objectEqual(a, b) {$/;"	F
 objectEqual	src/NegClustHelperFcts.ts	/^export function objectEqual(a:any[], b:any[]) {$/;"	f
 objs	src/NegClustHelperFcts.js	/^    var objs = [];$/;"	A
-out	src/NegClustHelperFcts.js	/^    var out = "Read(\\".\/setup.g\\");\\n";$/;"	V
+out	src/NegClustHelperFcts.js	/^    var out = "Read(\\".\/SupportTauTiltingMutation.g\\");\\n";$/;"	V
 pathAlgebra	src/NegClustHelperFcts.js	/^function pathAlgebra(sms) {$/;"	F
 pathAlgebra	src/NegClustHelperFcts.ts	/^export function pathAlgebra(sms: CwObjectCollection){$/;"	f
+pathAlgebraFromPasc	src/NegClustHelperFcts.js	/^function pathAlgebraFromPasc(pasc) {$/;"	F
+pathAlgebraFromPasc	src/NegClustHelperFcts.ts	/^export function pathAlgebraFromPasc(pasc: CwObjectCollection){$/;"	f
 pathAlgebraOld	src/NegClustHelperFcts.js	/^function pathAlgebraOld(sms) {$/;"	F
 pathAlgebraOld	src/NegClustHelperFcts.ts	/^export function pathAlgebraOld(sms: CwObjectCollection){$/;"	f
 perp	src/NegClustHelperFcts.js	/^    var perp = [];$/;"	A
+potentialProjectives	src/NegClustHelperFcts.js	/^    var potentialProjectives = [];$/;"	A
+proj_corresponding_simples	src/NegClustHelperFcts.js	/^    var proj_corresponding_simples = {};$/;"	O
 qpa	src/NegClustHelperFcts.js	/^function qpa(numVertices, arrows, ideal) {$/;"	F
 qpa	src/NegClustHelperFcts.ts	/^export function qpa(numVertices:number, arrows:number[][], ideal:number[][]){$/;"	f
-qpaCode	src/NegClustHelperFcts.js	/^        var qpaCode = "cd \/Users\/ank\/master\/drive\/QPA\/scripts && gap --nointeract -b -c '\\n" + mystr + "'";$/;"	V
+qpaCode	src/NegClustHelperFcts.js	/^        var qpaCode = "cd \/Users\/ank\/master\/drive\/code\/qpa_scripts && gap --nointeract -b -c '\\n" + mystr + "'";$/;"	V
 qpaTorsionClasses	src/NegClustHelperFcts.js	/^function qpaTorsionClasses(sms) {$/;"	F
 qpaTorsionClasses	src/NegClustHelperFcts.ts	/^export function qpaTorsionClasses(sms:CwObjectCollection){$/;"	f
 randomSimpleMindedSystem	src/NegClustHelperFcts.js	/^function randomSimpleMindedSystem(w, e) {$/;"	F
@@ -113,19 +132,24 @@ removeObject	src/NegClustHelperFcts.js	/^    CwObjectCollection.prototype.remove
 res	src/NegClustHelperFcts.js	/^    var res = "";$/;"	V
 resArr	src/NegClustHelperFcts.js	/^    var resArr = [];$/;"	A
 rightPerpInCollection	src/NegClustHelperFcts.js	/^function rightPerpInCollection(set, inColl) {$/;"	F
-rightPerpInCollection	src/NegClustHelperFcts.ts	/^export function rightPerpInCollection(set:number[][], inColl:CwObjectCollection){$/;"	f
+rightPerpInCollection	src/NegClustHelperFcts.ts	/^export function rightPerpInCollection(set:CwObjectCollection, inColl:CwObjectCollection){$/;"	f
 setVerbose	src/NegClustHelperFcts.js	/^function setVerbose(val) { exports.verbose = val; }$/;"	F
 setVerbose	src/NegClustHelperFcts.ts	/^export function setVerbose(val: boolean){ verbose = val; }$/;"	f
 sms	src/NegClustHelperFcts.js	/^        var sms = new CwObjectCollection(helper(0, N - 1, true), w, e);$/;"	V
+sms	src/NegClustHelperFcts.js	/^    var sms = new CwObjectCollection(sms_objects, pasc.w, pasc.e);$/;"	V
+sms_objects	src/NegClustHelperFcts.js	/^    var sms_objects = [];$/;"	A
 step	src/NegClustHelperFcts.js	/^    function step(op) {$/;"	F
 str	experiments/article.js	/^        var str = "\\\\dFourTors";$/;"	V
 tempIndex	src/NegClustHelperFcts.js	/^    var tempIndex = 0;$/;"	V
+tilt	src/NegClustHelperFcts.js	/^    CwObjectCollection.prototype.tilt = function (torsionFree) {$/;"	M
 toString	src/NegClustHelperFcts.js	/^    CwObjectCollection.prototype.toString = function () {$/;"	M
-torsion	src/NegClustHelperFcts.js	/^        var torsion = new CwObjectCollection(leftPerpInCollection(torsionFree.objectList, this), this.w, this.e);$/;"	V
 torsionFreeClassCollection	src/NegClustHelperFcts.js	/^            var torsionFreeClassCollection = new CwObjectCollection([], sms.w, sms.e);$/;"	V
 torsionFreeClassCollectionArray	src/NegClustHelperFcts.js	/^        var torsionFreeClassCollectionArray = [];$/;"	A
+transform	jest.config.js	/^  transform: {'^.+\\\\.ts?$': 'ts-jest'},$/;"	P
 union	src/NegClustHelperFcts.js	/^function union(A, B) {$/;"	F
 union	src/NegClustHelperFcts.ts	/^export function union(A: CwObjectCollection, B: CwObjectCollection){$/;"	f
 verb	src/NegClustHelperFcts.js	/^    function verb(n) { return function (v) { return step([n, v]); }; }$/;"	F
 w	experiments/ext2.js	/^    var w = 3;$/;"	V
+w	experiments/test2.js	/^var w = 5;$/;"	V
+w	experiments/threeIntermediate.js	/^var w = 5;$/;"	V
 works	experiments/ext2.js	/^var works = [];$/;"	A
