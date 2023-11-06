@@ -36,7 +36,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 exports.__esModule = true;
-exports.ext2Agree = exports.isEn = exports.randomSimpleMindedSystem = exports.qpaTorsionClasses = exports.dimensionVectorToObject = exports.qpa = exports.generateIndecomposables = exports.pathAlgebra = exports.pathAlgebraFromPasc = exports.pathAlgebraOld = exports.extension = exports.collectionEqual = exports.union = exports.intersection = exports.filtSub = exports.filtGen = exports.CwObjectCollection = exports.rightPerpInCollection = exports.leftPerpInCollection = exports.objectEqual = exports.ext = exports.getDiagonalDifferenece = exports.isHomBetweenCollections = exports.isWDiagonal = exports.getSharedEndpoint = exports.isCrossing = exports.homDim = exports.Ndist = exports.isNOrdered = exports.Sigma = exports.setVerbose = exports.verbose = void 0;
+exports.ext2Agree = exports.isEn = exports.randomSimpleMindedSystem = exports.qpaTorsionClasses = exports.dimensionVectorToObject = exports.qpa = exports.generateIndecomposables = exports.pathAlgebra = exports.pathAlgebraFromPasc = exports.extension = exports.collectionEqual = exports.union = exports.intersection = exports.filtSub = exports.filtGen = exports.CwObjectCollection = exports.rightPerpInCollection = exports.leftPerpInCollection = exports.objectEqual = exports.ext = exports.getDiagonalDifferenece = exports.isHomBetweenCollections = exports.isWDiagonal = exports.getSharedEndpoint = exports.isCrossing = exports.homDim = exports.Ndist = exports.isNOrdered = exports.Sigma = exports.setVerbose = exports.verbose = void 0;
 exports.verbose = true;
 function setVerbose(val) { exports.verbose = val; }
 exports.setVerbose = setVerbose;
@@ -385,21 +385,6 @@ var CwObjectCollection = /** @class */ (function () {
         }
         return a;
     };
-    // todo: rewrite to proper mutate
-    //st torsionfree class 
-    CwObjectCollection.prototype.mutate = function (torsionFree) {
-        // torsion = ^perp st = leftperp(st)
-        var torsion = leftPerpInCollection(torsionFree, this);
-        //let a: CwObjectCollection = new CwObjectCollection([], this.w, this.e);
-        // for(let ob of this.objectList){
-        //if(!st.contains(ob)){
-        //a.add(ob as [number, number]);
-        //}else{
-        //a.add(Sigma(ob, this.N) as [number, number]);
-        //}
-        //}
-        return extension(torsionFree.Sigma(), torsion);
-    };
     CwObjectCollection.prototype.tilt = function (torsionFree) {
         var torsion = leftPerpInCollection(torsionFree, this);
         return extension(torsionFree.Sigma(), torsion);
@@ -412,6 +397,14 @@ var CwObjectCollection = /** @class */ (function () {
             a.add(Sigma(ob, this.N, power));
         }
         return a;
+    };
+    // Should be a pasc for this to be used.
+    CwObjectCollection.prototype.findRandomTorsionFreeClass = function (sead_size) {
+        if (sead_size === void 0) { sead_size = 1; }
+        var num = Math.floor(Math.random() * (this.objectList.length - 1 + 1) + 1);
+        var shuffled = this.objectList.sort(function () { return 0.5 - Math.random(); });
+        var selected = shuffled.slice(0, num);
+        return filtSub(new CwObjectCollection(selected, this.w, this.e), this);
     };
     return CwObjectCollection;
 }());
@@ -486,93 +479,6 @@ function extension(A, B) {
     return a;
 }
 exports.extension = extension;
-function pathAlgebraOld(sms) {
-    if (!sms.isSimpleMindedSystem()) {
-        return null;
-    }
-    var ideal = [];
-    var arrows = [];
-    var compositions = [];
-    var composition_module = [];
-    // Create list of arrows
-    var _hd = 0;
-    for (var _i = 0; _i < sms.objectList.length; _i++) {
-        for (var _j = 0; _j < sms.objectList.length; _j++) {
-            // Arros from _i to _j
-            _hd = homDim(sms.objectList[_j], Sigma(sms.objectList[_i], sms.N), sms.w, sms.e);
-            for (var _k = 0; _k < _hd; _k++) {
-                //arrows.push([_i, _j]);
-                arrows.push([_i, _j]);
-            }
-        }
-    }
-    // Create list of ideals
-    var tempIndex = 0;
-    for (var _i = 0; _i < arrows.length; _i++) {
-        var e1 = ext(sms.objectList[arrows[_i][1]], sms.objectList[arrows[_i][0]], sms.w, sms.N);
-        if (e1.length == 1) {
-            compositions.push([_i]);
-            composition_module.push(e1[0]);
-        }
-        else {
-            console.log("There Is Some Kind Of ERROR");
-        }
-    }
-    //let e1 = ext(object, sms.objectList[i],sms.w,sms.N);
-    //let e2 = ext(sms.objectList[i], object,sms.w,sms.N);
-    //if(e1.length + e2.length != 1){
-    //    //console.warn("SOMETHING WRONG", e1, e2);
-    //    continue;
-    //}
-    //if(e1.length == 1){
-    //    object = e1[0];
-    //}else if(e2.length == 1){
-    //    object = e2[0];
-    //}
-    // Calculating zero relations / Ideal
-    while (tempIndex != compositions.length) {
-        //console.log(temIndex, compositions.length);
-        for (var _i = 0; _i < arrows.length; _i++) {
-            for (var _j = tempIndex; _j < compositions.length; _j++) {
-                tempIndex = _j + 1;
-                if (arrows[_i][1] != arrows[compositions[_j][0]][0]) {
-                    continue;
-                }
-                // j*i makes sense:, check jf 
-                // arrows[_i][0]  -- i --> arrows[_i][1]  -- j --> arrows[compositions[_j].last][1]
-                // is non-zero
-                var newComp = __spreadArray([_i], compositions[_j], true);
-                //Composition makes sense, i.e. enpoint of arrow equal start of composition
-                if (sms.objectList[compositions[_j][0]] == sms.objectList[arrows[_i][1]]) {
-                    var e2 = ext(composition_module[_j], composition_module[_i], sms.w, sms.N);
-                    if (e2.length == 0) {
-                        //Composition of arrows is 0
-                        ideal.push(newComp);
-                    }
-                    if (e2.length == 1) {
-                        // Composition exists, and i non-zero
-                        compositions.push(newComp);
-                    }
-                    if (e2.length > 1) {
-                        console.log("Something went wrong");
-                    }
-                }
-                //if(homDim(
-                //    sms.objectList[arrows[compositions[_j][compositions[_j].length - 1]][1]],
-                //    Sigma(sms.objectList[arrows[_i][0]],
-                //sms.N), sms.w, sms.e)){
-                //    // composition is non-zero
-                //    compositions.push(newComp);
-                //}else{
-                //    // composition is zero
-                //    ideal.push(newComp);
-                //}
-            }
-        }
-    }
-    return [arrows, ideal];
-}
-exports.pathAlgebraOld = pathAlgebraOld;
 function pathAlgebraFromPasc(pasc) {
     // We can find potential projectives as objects with no extensions out
     var potentialProjectives = [];

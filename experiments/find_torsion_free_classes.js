@@ -1,0 +1,13 @@
+"use strict";
+exports.__esModule = true;
+var nch = require("../src/NegClustHelperFcts");
+nch.setVerbose(true);
+var w = 3;
+var e = 4;
+var d = new nch.CwObjectCollection([[0, 3], [4, 11], [5, 8], [12, 15]], 3, 4);
+var alg = d.extensionClose();
+console.log(alg.findRandomTorsionFreeClass(3));
+console.log(alg.findRandomTorsionFreeClass(3));
+console.log(alg.findRandomTorsionFreeClass(3));
+console.log(alg.findRandomTorsionFreeClass(3));
+console.log(alg.findRandomTorsionFreeClass(3));
