@@ -1,6 +1,7 @@
 export let verbose: boolean = true
 export function setVerbose(val: boolean){ verbose = val; }
 
+// Transferred
 /**
  * Suspension of N-diagonal.
  * 
@@ -17,6 +18,7 @@ export function Sigma(s:any[], N:number, power:number = 1){
     return [n[1], n[0]];
 }
 
+// Transferred
 /**
  * is N-Cylic ordered: n1 < n2 < n3.
  * 
@@ -31,6 +33,7 @@ export function isNOrdered(n1: number, n2: number, n3: number, N: number){
     return (Ndist(n1, n2, N) < d && Ndist(n2, n3, N) < d);
 }
 
+// Transferred
 /**
  * Calculates a clock-wise "distance" from a to b.
  * Can also be seen as "distance" Z/NZ, is b-a if b is the least representative of [b], such that b>a.
@@ -48,6 +51,7 @@ export function Ndist(a:number,b:number, N:number){
     return -1;
 }
 
+// Transferred
 /**
  * Calculates k dimension of hom space hom(s1,s2) in C_{-w}(A_e).
  * 
@@ -79,6 +83,7 @@ export function homDim(s1:any[], s2:any[], w:number, e:number){
     return 0;
 }
 
+// Transferred
 /**
  * Checks if two N-diagonals are crossing.
  * 
@@ -90,6 +95,7 @@ export function isCrossing(a: any[], b: any[]): boolean{
     return !(a[0]>=b[1] || a[1]<=b[0] || (a[1] <= b[1] && a[0] >= b[0]) || (b[1] <= a[1] && b[0] >= a[0]));
 }
 
+// Transferred
 /**
  * Gets a shared endpoint of N-diagonals if exists, otherwise -1:
  *
@@ -105,6 +111,7 @@ export function getSharedEndpoint(a: any[], b: any[]){
     return -1
 }
 
+// Transferred
 /**
  * Checks if N-diagonal is w admissible
  *
@@ -116,6 +123,7 @@ export function isWDiagonal(a: any[], w: number): boolean{
     return (( (a[1] - a[0]) + 1 )% (w + 1)  == 0);
 }
 
+//transferred
 /**
  * Is the hom space between two colletions non-zero
  * 
@@ -134,6 +142,7 @@ export function isHomBetweenCollections(A: CwObjectCollection, B: CwObjectCollec
     return false;
 }
 
+// Transferred
 // e's in article fig 11. 
 // Doesnt check if w-diagonal
 export function getDiagonalDifferenece(a: any[], b: any[], N:number){
@@ -161,6 +170,7 @@ export function getDiagonalDifferenece(a: any[], b: any[], N:number){
     return objs;
 }
 
+// Transferred
 // find exts a --> b --> c, returns [b]
 export function ext(c: [number, number], a:[number, number], w:number, N:number){
     if( isCrossing(c,a) || ( !isCrossing(c,a) && getSharedEndpoint(Sigma(a, N), c) >= 0 ) ){
@@ -218,6 +228,7 @@ export function rightPerpInCollection(set:CwObjectCollection, inColl:CwObjectCol
     return new CwObjectCollection(perp, inColl.w, inColl.e);
 }
 
+// Transferred
 export class CwObjectCollection{
     objectList: [number, number][] = [];
 
@@ -233,15 +244,17 @@ export class CwObjectCollection{
             this.add(k);
         }
     }
-
+    //transfered
     toString(): string{
         return this.objectList.map(a => "(" + a.toString() + ")").toString()
     }
 
+    //transfered
     add(obj: [number, number]){
        this.objectList.push(obj);
     }
 
+    //transfered
     containsSet(objs: [number, number][]){
         for(let v of objs){
             if(!this.contains(v)){
@@ -251,6 +264,7 @@ export class CwObjectCollection{
         return true;
     }
 
+    //transfered
     contains(obj: [number, number]){
         const i = this.find(obj);
         if(i < 0){
@@ -259,6 +273,7 @@ export class CwObjectCollection{
         return this.objectList[i];
     }
 
+    //transfered
     // Returns index
     find(obj: [number, number]){
         for(var _i = 0; _i < this.objectList.length; _i++){
@@ -269,14 +284,8 @@ export class CwObjectCollection{
         return -1;
     }
 
-    removeIndex(index: number){ }
-
-    removeObject(index: number){ }
-
+    //transfered
     isSimpleMindedSystem(){
-        //if(this.objectList.length != this.e){
-        //    return false;
-        //}
         for(var _i = 0; _i < this.objectList.length; _i++){
             for(var _j = _i+1; _j < this.objectList.length; _j++){
                 if(this.objectList[_i][0] == this.objectList[_j][0] ||
@@ -294,10 +303,12 @@ export class CwObjectCollection{
         return true;
     }
 
+    // Transferred
     isExtensionClosed(){
         return collectionEqual(this, this.extensionClose());
     }
 
+    // Transferred
     extensionClose(){
         let a: CwObjectCollection = new CwObjectCollection(this.objectList, this.w, this.e);
         let somethingAdded: Boolean = false;
@@ -348,6 +359,7 @@ export function filtSub(set: CwObjectCollection, alg: CwObjectCollection){
     return rightPerpInCollection(leftPerpInCollection(set, alg), alg)
 }
 
+//Transfered
 export function intersection(A: CwObjectCollection, B: CwObjectCollection){
     if(A.w != B.w || A.e != B.e){
         console.warn("Collection doesn't compare");
@@ -366,6 +378,7 @@ export function intersection(A: CwObjectCollection, B: CwObjectCollection){
 
 }
 
+//Transfered
 export function union(A: CwObjectCollection, B: CwObjectCollection){
     if(A.w != B.w || A.e != B.e){
         console.warn("Collection doesn't compare");
@@ -383,6 +396,7 @@ export function union(A: CwObjectCollection, B: CwObjectCollection){
     return a;
 }
 
+//Transfered
 export function collectionEqual(A: CwObjectCollection, B: CwObjectCollection){
     return A.containsSet(B.objectList) && B.containsSet(A.objectList);
 }
@@ -708,6 +722,7 @@ export function qpaTorsionClasses(sms:CwObjectCollection): Promise<any> {
     });
 }
 
+// Transferred
 export function randomSimpleMindedSystem(w:number, e:number){
     const N: number = (e+1) * (w+1) - 2;
 
