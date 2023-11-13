@@ -196,6 +196,7 @@ export function objectEqual(a:any[], b:any[]) {
     return true;
 }
 
+// Transferred
 // ^{perp}set
 export function leftPerpInCollection(set:CwObjectCollection, inColl:CwObjectCollection){
     let perp:[number,number][] = []
@@ -212,6 +213,7 @@ export function leftPerpInCollection(set:CwObjectCollection, inColl:CwObjectColl
     return new CwObjectCollection(perp, inColl.w, inColl.e);
 }
 
+// Transferred
 // Set^perp
 export function rightPerpInCollection(set:CwObjectCollection, inColl:CwObjectCollection){
     let perp:[number,number][] = []
@@ -351,10 +353,12 @@ export class CwObjectCollection{
     }
 }
 
+// Transferred
 export function filtGen(set: CwObjectCollection, alg: CwObjectCollection){
     return leftPerpInCollection(rightPerpInCollection(set, alg), alg)
 }
 
+// Transferred
 export function filtSub(set: CwObjectCollection, alg: CwObjectCollection){
     return rightPerpInCollection(leftPerpInCollection(set, alg), alg)
 }
@@ -402,6 +406,7 @@ export function collectionEqual(A: CwObjectCollection, B: CwObjectCollection){
 }
 
 // Compute A * B
+//Transferred
 export function extension(A: CwObjectCollection, B: CwObjectCollection){
     let a: CwObjectCollection | null = union(A, B);
     if(a === null){ return null; }

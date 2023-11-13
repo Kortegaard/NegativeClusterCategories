@@ -1,4 +1,5 @@
 import * as ncc from '../src/NCC';
+import * as diag from '../src/DiagonalCollectionFcts';
 import {NegativeCCDiagonalCollection} from '../src/NegativeCCDiagonalCollection';
 
 describe('Testing Negative Cluster Category Functions', () => {
@@ -89,5 +90,19 @@ describe('Testing Negative Cluster Category Functions', () => {
       expect(extcls.isExtensionClosed()).toEqual(true);
     }
   });
+
+  test('leftPerp - precalculated', () => {
+    const c1 = ncc.leftPerp(new NegativeCCDiagonalCollection([[5,8],[12,15]], sms3.w, sms3.e), sms3_extClose)
+    const c1_shouldbe = new NegativeCCDiagonalCollection([[0,3],[0,11],[4,11]], sms3.w, sms3.e)
+
+    expect(c1.equal(c1_shouldbe)).toEqual(true)
+  })
+
+  test('rightPerp - precalculated', () => {
+    const c1 = ncc.rightPerp(new NegativeCCDiagonalCollection([[5,8],[12,15]], sms3.w, sms3.e), sms3_extClose)
+    const c1_shouldbe = new NegativeCCDiagonalCollection([[0,3],[0,11],[0,15],[4,11],[4,15],[8,11],[8,15]], sms3.w, sms3.e)
+
+    expect(c1.equal(c1_shouldbe)).toEqual(true)
+  })
 
 });

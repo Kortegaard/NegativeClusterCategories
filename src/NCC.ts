@@ -165,6 +165,42 @@ export function extensionClose(A: NegativeCCDiagonalCollection){
 
 
 
+export function randomSimpleMindedSystem2(w:number, e:number, num_attempts = 10): NegativeCCDiagonalCollection{
+    const N: number = (e+1) * (w+1) - 2;
+
+    function getRndInteger(min: number, max: number) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function numberArray(from: number, to:number){
+        return Array.from({length: to-from+1}, (_, index) => index + from)
+    }
+
+    function helper(d1 = undefined, d2 = undefined){
+        //
+        //
+
+    }
+
+    function helper2(polygon: number[], taken: number[]){
+        let a1 = polygon.filter((d) => taken.indexOf(d) == -1)
+        if(a1.length < 2){ return [] }
+        const random_diag_start = a1[Math.floor(Math.random() * a1.length)]
+        let possiblePartners = polygon.filter((n) => {
+            if(n == random_diag_start){ return false }
+            return (Math.abs(n-random_diag_start) + 1) % (w + 1)
+        })
+        const random_partner = possiblePartners[Math.floor(Math.random() * possiblePartners.length)]
+        let diag = [random_diag_start, random_partner].sort((a, b)=>{return b-a})
+        // Need to find polygon that this diagonal split the original into
+    }
+    let h = helper(numberArray(0,N-1), [])
+    return new NegativeCCDiagonalCollection([],3,4)
+}
+
+
+
+
 export function randomSimpleMindedSystem(w:number, e:number, num_attempts = 10): NegativeCCDiagonalCollection{
     const N: number = (e+1) * (w+1) - 2;
 
@@ -238,4 +274,35 @@ export function extension(A: NegativeCCDiagonalCollection, B: NegativeCCDiagonal
         }
     }
     return a;
+}
+
+export function leftPerp(of:NegativeCCDiagonalCollection, inColl:NegativeCCDiagonalCollection){
+    return inColl.clone((diag) => {
+        for(let ofDiag of of.diagonals){
+            if(homDim(diag, ofDiag, inColl.w, inColl.e) > 0){
+                return false
+            }
+        }
+        return true
+    })
+}
+
+// Set^perp
+export function rightPerp(of:NegativeCCDiagonalCollection, inColl:NegativeCCDiagonalCollection){
+    return inColl.clone((diag) => {
+        for(let ofDiag of of.diagonals){
+            if(homDim(ofDiag, diag, inColl.w, inColl.e) > 0){
+                return false
+            }
+        }
+        return true
+    })
+}
+
+export function filtGen(set: NegativeCCDiagonalCollection, alg: NegativeCCDiagonalCollection){
+    return leftPerp(rightPerp(set, alg), alg)
+}
+
+export function filtSub(set: NegativeCCDiagonalCollection, alg: NegativeCCDiagonalCollection){
+    return rightPerp(leftPerp(set, alg), alg)
 }
