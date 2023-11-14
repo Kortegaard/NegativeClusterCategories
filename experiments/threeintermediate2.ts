@@ -3,7 +3,7 @@ nch.setVerbose(true);
 
 let d = new nch.CwObjectCollection([ [ 0, 3 ], [ 4, 11 ], [ 5, 8 ], [ 12, 15 ]], 3,4);
 
-let w = 5
+let w = 6
 let e = 5
 
 function display(w,e, sets){
@@ -38,7 +38,7 @@ function RunSingleRandomRound(w, e, verbose = false){
             break
         }
     }
-    if(!nch.isEn(alg1, 4)){ return; }
+    if(!nch.isEn(alg1, 5)){ return; }
 
     let torsFree1 = alg1?.findRandomTorsionFreeClass(5);
 
@@ -47,7 +47,7 @@ function RunSingleRandomRound(w, e, verbose = false){
     let torsFree2 = alg2?.findRandomTorsionFreeClass(5);
 
     let alg3 = alg2?.tilt(torsFree2!);
-    if(!nch.isEn(alg3, 4)){ return; }
+    if(!nch.isEn(alg3, 5)){ return; }
     p = nch.pathAlgebraFromPasc(alg3) as any[];
     if(p[0].length<e-1){ return }
 

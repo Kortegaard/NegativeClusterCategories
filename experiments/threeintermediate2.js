@@ -3,7 +3,7 @@ exports.__esModule = true;
 var nch = require("../src/NegClustHelperFcts");
 nch.setVerbose(true);
 var d = new nch.CwObjectCollection([[0, 3], [4, 11], [5, 8], [12, 15]], 3, 4);
-var w = 5;
+var w = 6;
 var e = 5;
 function display(w, e, sets) {
     var str = "./gen.py " + w + " " + e + " mine.tex";
@@ -34,14 +34,14 @@ function RunSingleRandomRound(w, e, verbose) {
             break;
         }
     }
-    if (!nch.isEn(alg1, 4)) {
+    if (!nch.isEn(alg1, 5)) {
         return;
     }
     var torsFree1 = alg1 === null || alg1 === void 0 ? void 0 : alg1.findRandomTorsionFreeClass(5);
     var alg2 = alg1 === null || alg1 === void 0 ? void 0 : alg1.tilt(torsFree1);
     var torsFree2 = alg2 === null || alg2 === void 0 ? void 0 : alg2.findRandomTorsionFreeClass(5);
     var alg3 = alg2 === null || alg2 === void 0 ? void 0 : alg2.tilt(torsFree2);
-    if (!nch.isEn(alg3, 4)) {
+    if (!nch.isEn(alg3, 5)) {
         return;
     }
     p = nch.pathAlgebraFromPasc(alg3);
