@@ -23,6 +23,8 @@ export class NegativeCCDiagonalCollection extends DiagonalCollection{
 
    isSimpleMindedSystem(){
         for(var _i = 0; _i < this.diagonals.length; _i++){
+            if(this.diagonals[_i][1] <= this.diagonals[_i][0]){ return false }
+            if(NCC.isWDiagonal(this.diagonals[_i], this.w))
             for(var _j = _i+1; _j < this.diagonals.length; _j++){
                 if(this.diagonals[_i][0] == this.diagonals[_j][0] ||
                    this.diagonals[_i][1] == this.diagonals[_j][0] ||

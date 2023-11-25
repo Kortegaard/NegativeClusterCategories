@@ -164,41 +164,143 @@ export function extensionClose(A: NegativeCCDiagonalCollection){
 }
 
 
-
-export function randomSimpleMindedSystem2(w:number, e:number, num_attempts = 10): NegativeCCDiagonalCollection{
+export function randomSimpleMindedSystem2(w:number, e:number): NegativeCCDiagonalCollection{
     const N: number = (e+1) * (w+1) - 2;
 
-    function getRndInteger(min: number, max: number) {
-        return Math.floor(Math.random() * (max - min)) + min;
+    function getRandomInteger(min: number, max: number) {
+        return Math.floor(Math.random() * (max + 1 - min)) + min;
+    }
+
+    function random_array_value(arr: any[]){
+        return arr[Math.floor(Math.random() * arr.length)]
     }
 
     function numberArray(from: number, to:number){
         return Array.from({length: to-from+1}, (_, index) => index + from)
     }
 
-    function helper(d1 = undefined, d2 = undefined){
-        //
-        //
+    const diagonals: Diagonal[] = [] 
+    
+    //should be tested. and by backwards, i meen counterclockwise
+    function NDistance(a: number, b: number, backwards: Boolean = false){
+        if(!backwards){
+            if(b>=a){ return b-a }
+            if(b<a) { return b+N - a}
+        }
+        if(backwards){
+            if(b>=a){ return a+N-b }
+            if(b<a) { return a-b }
+        }
+    }
+
+    function helper(subpol_diag_indexes:number[] , backwards: Boolean){
+        if(subpol_diag_indexes.length == 0){
+            const diag_start = getRandomInteger(0, N-1);
+            const diag_end = (diag_start + (w+1) * getRandomInteger(1, e)) % N; // Correct to choose e?
+            diagonals.push([diag_start,diag_end].sort((a,b)=>{return a-b}) as Diagonal)
+            helper([0],true) 
+            helper([0],false) 
+            return;
+        }
+        if(subpol_diag_indexes.length == 1){
+            const dist = NDistance(diagonals[subpol_diag_indexes[0]][0],diagonals[subpol_diag_indexes[0]][1], backwards)
+            const num_avail = dist - 1;
+            if( num_avail <= w ){ return }
+            //need to be chosen smart, otherwise if not enough avail, a,b could both be 0
+            const diag_start = getRandomInteger(0,num_avail-1)
+
+            const _a = -Math.floor((NDistance(diagonals[subpol_diag_indexes[0]][0], diag_start,backwards)-2)/(w+1))
+            const _b = Math.floor((NDistance(diag_start, diagonals[subpol_diag_indexes[0]][1],backwards)-2)/(w+1))
+
+            let diag_end_dir = getRandomInteger(_a+1,_b) 
+            if(diag_end_dir==0){ diag_end_dir = -1}
+
+            const diag_end = diag_start + diag_end_dir * (w+1)
+            diagonals.push([diag_start,diag_end].sort((a,b)=>{return a-b}) as Diagonal)
+            helper([0,1], !backwards)
+            //helper([1], )
+            return
+        }
 
     }
 
-    function helper2(polygon: number[], taken: number[]){
-        let a1 = polygon.filter((d) => taken.indexOf(d) == -1)
-        if(a1.length < 2){ return [] }
-        const random_diag_start = a1[Math.floor(Math.random() * a1.length)]
-        let possiblePartners = polygon.filter((n) => {
-            if(n == random_diag_start){ return false }
-            return (Math.abs(n-random_diag_start) + 1) % (w + 1)
-        })
-        const random_partner = possiblePartners[Math.floor(Math.random() * possiblePartners.length)]
-        let diag = [random_diag_start, random_partner].sort((a, b)=>{return b-a})
-        // Need to find polygon that this diagonal split the original into
-    }
-    let h = helper(numberArray(0,N-1), [])
-    return new NegativeCCDiagonalCollection([],3,4)
+    
+    return new NegativeCCDiagonalCollection([],w,e)
 }
 
 
+export function randomSimpleMindedSystem3(w:number, e:number): NegativeCCDiagonalCollection{
+    const N: number = (e+1) * (w+1) - 2;
+
+    function getRandomInteger(min: number, max: number) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function random_array_value(arr: any[]){
+        return arr[Math.floor(Math.random() * arr.length)]
+    }
+
+    function numberArray(from: number, to:number){
+        return Array.from({length: to-from+1}, (_, index) => index + from)
+    }
+
+    function random_shuffle(array) {
+        let currentIndex = array.length
+        let randomIndex: number;
+      
+        while (currentIndex > 0) {
+          randomIndex = getRandomInteger(0, currentIndex)
+          currentIndex -= 1;
+      
+          [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+      
+        return array;
+      }
+      
+    function helper(polygon: number[], taken: number[]){
+        if(polygon.length < (w+1)*2-2){ return [] }
+        let available_nodes = random_shuffle(polygon.filter((d) => taken.indexOf(d) == -1))
+        if(available_nodes.length < 2){ return [] }
+        let randomized_available_nodes = random_shuffle(available_nodes)
+        let random_partner:number = -1
+        let i = 0
+        let found_one = false
+        for (i = 0; i < randomized_available_nodes.length; i++) {
+            let possiblePartners = available_nodes.filter((n) => {
+                if(n == randomized_available_nodes[i]){ return false }
+                return (Math.abs(n-randomized_available_nodes[i]) + 1) % (w + 1) == 0
+            })
+            if(possiblePartners.length == 0){ continue }
+            found_one = true
+            random_partner = random_array_value(possiblePartners)
+            break
+        }
+        if(random_partner == -1){ return []}
+        if(!found_one){
+            console.log("sms, something wrong")
+            return []
+        }
+
+        let diag = [randomized_available_nodes[i], random_partner].sort((a, b)=>{return a-b})
+
+        const pol1 = polygon.filter((n) => {
+            return isNOrdered(diag[0], diag[1],n, N) || n == diag[0] || n ==diag[1]
+        })
+        const taken1 = taken.filter((n) => { return pol1.indexOf(n)>=0 })
+        taken1.push(diag[0], diag[1])
+
+        const pol2 = polygon.filter((n) => {
+            return !isNOrdered(diag[0], diag[1],n, N) || n == diag[0] || n ==diag[1]
+        })
+        const taken2 = taken.filter((n) => { return pol2.indexOf(n)>=0 })
+        taken2.push(diag[0], diag[1])
+
+        return [diag, ...helper(pol1, taken1), ...helper(pol2, taken2)]
+    }
+    let h = helper(numberArray(0,N-1), [])
+    return new NegativeCCDiagonalCollection(h,w,e)
+}
 
 
 export function randomSimpleMindedSystem(w:number, e:number, num_attempts = 10): NegativeCCDiagonalCollection{
@@ -227,6 +329,7 @@ export function randomSimpleMindedSystem(w:number, e:number, num_attempts = 10):
         }
     }
 
+    console.log("NOT SMS")
     return null;
 }
 
