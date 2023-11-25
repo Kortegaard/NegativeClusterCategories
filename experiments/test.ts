@@ -1,19 +1,12 @@
-import * as nch from "../src/NegClustHelperFcts"
-//let d = new nch.CwObjectCollection([[ 0, 3 ], [ 10, 13 ], [ 14, 17 ]],3,4)
-let d = new nch.CwObjectCollection([[ 0, 3 ], [5,8], [ 10, 13 ], [ 14, 17 ]],3,4)
+import * as nch from "../src/NCC"
 
-let sms = d.Sigma().Sigma().Sigma().Sigma().Sigma().Sigma().Sigma().Sigma();
-let A = sms.extensionClose();
-let kQ = nch.pathAlgebra(sms);
+function getPerf(fn, n) {
+    var t0, t1;
+    t0 = performance.now();
+    for (var i = 0; i < n; i++) { fn() }
+    t1 = performance.now();
+    return [t1 - t0, (t1-t0)/n];
+}
 
-console.log("SMS", sms)
-console.log("sigma squared SMS", sms.Sigma().Sigma())
-console.log("ALG", A)
-console.log("kQ", kQ)
-
-console.log(sms.isSimpleMindedSystem());
-console.log(nch.isEn(sms, 2))
-console.log(nch.ext2Agree(sms))
-
-
-
+//console.log(getPerf(() => nch.randomSimpleMindedSystem3(300,400), 10))
+console.log(getPerf(() => nch.randomSimpleMindedSystem(300,400,100000),  1))

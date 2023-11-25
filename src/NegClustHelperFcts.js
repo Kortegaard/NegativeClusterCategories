@@ -40,6 +40,7 @@ exports.ext2Agree = exports.isEn = exports.randomSimpleMindedSystem = exports.qp
 exports.verbose = true;
 function setVerbose(val) { exports.verbose = val; }
 exports.setVerbose = setVerbose;
+// Transferred
 /**
  * Suspension of N-diagonal.
  *
@@ -59,6 +60,7 @@ function Sigma(s, N, power) {
     return [n[1], n[0]];
 }
 exports.Sigma = Sigma;
+// Transferred
 /**
  * is N-Cylic ordered: n1 < n2 < n3.
  *
@@ -73,6 +75,7 @@ function isNOrdered(n1, n2, n3, N) {
     return (Ndist(n1, n2, N) < d && Ndist(n2, n3, N) < d);
 }
 exports.isNOrdered = isNOrdered;
+// Transferred
 /**
  * Calculates a clock-wise "distance" from a to b.
  * Can also be seen as "distance" Z/NZ, is b-a if b is the least representative of [b], such that b>a.
@@ -96,6 +99,7 @@ function Ndist(a, b, N) {
     return -1;
 }
 exports.Ndist = Ndist;
+// Transferred
 /**
  * Calculates k dimension of hom space hom(s1,s2) in C_{-w}(A_e).
  *
@@ -136,6 +140,7 @@ function homDim(s1, s2, w, e) {
     return 0;
 }
 exports.homDim = homDim;
+// Transferred
 /**
  * Checks if two N-diagonals are crossing.
  *
@@ -147,6 +152,7 @@ function isCrossing(a, b) {
     return !(a[0] >= b[1] || a[1] <= b[0] || (a[1] <= b[1] && a[0] >= b[0]) || (b[1] <= a[1] && b[0] >= a[0]));
 }
 exports.isCrossing = isCrossing;
+// Transferred
 /**
  * Gets a shared endpoint of N-diagonals if exists, otherwise -1:
  *
@@ -170,6 +176,7 @@ function getSharedEndpoint(a, b) {
     return -1;
 }
 exports.getSharedEndpoint = getSharedEndpoint;
+// Transferred
 /**
  * Checks if N-diagonal is w admissible
  *
@@ -181,6 +188,7 @@ function isWDiagonal(a, w) {
     return (((a[1] - a[0]) + 1) % (w + 1) == 0);
 }
 exports.isWDiagonal = isWDiagonal;
+//transferred
 /**
  * Is the hom space between two colletions non-zero
  *
@@ -201,6 +209,7 @@ function isHomBetweenCollections(A, B) {
     return false;
 }
 exports.isHomBetweenCollections = isHomBetweenCollections;
+// Transferred
 // e's in article fig 11. 
 // Doesnt check if w-diagonal
 function getDiagonalDifferenece(a, b, N) {
@@ -224,6 +233,7 @@ function getDiagonalDifferenece(a, b, N) {
     return objs;
 }
 exports.getDiagonalDifferenece = getDiagonalDifferenece;
+// Transferred
 // find exts a --> b --> c, returns [b]
 function ext(c, a, w, N) {
     if (isCrossing(c, a) || (!isCrossing(c, a) && getSharedEndpoint(Sigma(a, N), c) >= 0)) {
@@ -251,6 +261,7 @@ function objectEqual(a, b) {
     return true;
 }
 exports.objectEqual = objectEqual;
+// Transferred
 // ^{perp}set
 function leftPerpInCollection(set, inColl) {
     var perp = [];
@@ -270,6 +281,7 @@ function leftPerpInCollection(set, inColl) {
     return new CwObjectCollection(perp, inColl.w, inColl.e);
 }
 exports.leftPerpInCollection = leftPerpInCollection;
+// Transferred
 // Set^perp
 function rightPerpInCollection(set, inColl) {
     var perp = [];
@@ -289,6 +301,7 @@ function rightPerpInCollection(set, inColl) {
     return new CwObjectCollection(perp, inColl.w, inColl.e);
 }
 exports.rightPerpInCollection = rightPerpInCollection;
+// Transferred
 var CwObjectCollection = /** @class */ (function () {
     function CwObjectCollection(objs, w, e) {
         this.objectList = [];
@@ -303,12 +316,15 @@ var CwObjectCollection = /** @class */ (function () {
             this.add(k);
         }
     }
+    //transfered
     CwObjectCollection.prototype.toString = function () {
         return this.objectList.map(function (a) { return "(" + a.toString() + ")"; }).toString();
     };
+    //transfered
     CwObjectCollection.prototype.add = function (obj) {
         this.objectList.push(obj);
     };
+    //transfered
     CwObjectCollection.prototype.containsSet = function (objs) {
         for (var _a = 0, objs_2 = objs; _a < objs_2.length; _a++) {
             var v = objs_2[_a];
@@ -318,6 +334,7 @@ var CwObjectCollection = /** @class */ (function () {
         }
         return true;
     };
+    //transfered
     CwObjectCollection.prototype.contains = function (obj) {
         var i = this.find(obj);
         if (i < 0) {
@@ -325,6 +342,7 @@ var CwObjectCollection = /** @class */ (function () {
         }
         return this.objectList[i];
     };
+    //transfered
     // Returns index
     CwObjectCollection.prototype.find = function (obj) {
         for (var _i = 0; _i < this.objectList.length; _i++) {
@@ -334,12 +352,8 @@ var CwObjectCollection = /** @class */ (function () {
         }
         return -1;
     };
-    CwObjectCollection.prototype.removeIndex = function (index) { };
-    CwObjectCollection.prototype.removeObject = function (index) { };
+    //transfered
     CwObjectCollection.prototype.isSimpleMindedSystem = function () {
-        //if(this.objectList.length != this.e){
-        //    return false;
-        //}
         for (var _i = 0; _i < this.objectList.length; _i++) {
             for (var _j = _i + 1; _j < this.objectList.length; _j++) {
                 if (this.objectList[_i][0] == this.objectList[_j][0] ||
@@ -355,9 +369,11 @@ var CwObjectCollection = /** @class */ (function () {
         }
         return true;
     };
+    // Transferred
     CwObjectCollection.prototype.isExtensionClosed = function () {
         return collectionEqual(this, this.extensionClose());
     };
+    // Transferred
     CwObjectCollection.prototype.extensionClose = function () {
         var a = new CwObjectCollection(this.objectList, this.w, this.e);
         var somethingAdded = false;
@@ -409,14 +425,17 @@ var CwObjectCollection = /** @class */ (function () {
     return CwObjectCollection;
 }());
 exports.CwObjectCollection = CwObjectCollection;
+// Transferred
 function filtGen(set, alg) {
     return leftPerpInCollection(rightPerpInCollection(set, alg), alg);
 }
 exports.filtGen = filtGen;
+// Transferred
 function filtSub(set, alg) {
     return rightPerpInCollection(leftPerpInCollection(set, alg), alg);
 }
 exports.filtSub = filtSub;
+//Transfered
 function intersection(A, B) {
     if (A.w != B.w || A.e != B.e) {
         console.warn("Collection doesn't compare");
@@ -433,6 +452,7 @@ function intersection(A, B) {
     return a;
 }
 exports.intersection = intersection;
+//Transfered
 function union(A, B) {
     if (A.w != B.w || A.e != B.e) {
         console.warn("Collection doesn't compare");
@@ -449,11 +469,13 @@ function union(A, B) {
     return a;
 }
 exports.union = union;
+//Transfered
 function collectionEqual(A, B) {
     return A.containsSet(B.objectList) && B.containsSet(A.objectList);
 }
 exports.collectionEqual = collectionEqual;
 // Compute A * B
+//Transferred
 function extension(A, B) {
     var a = union(A, B);
     if (a === null) {
@@ -802,6 +824,7 @@ function qpaTorsionClasses(sms) {
     });
 }
 exports.qpaTorsionClasses = qpaTorsionClasses;
+// Transferred
 function randomSimpleMindedSystem(w, e) {
     var N = (e + 1) * (w + 1) - 2;
     function getRndInteger(min, max) {
