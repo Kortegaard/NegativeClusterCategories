@@ -1,7 +1,7 @@
 
 import { DiagonalCollection, Diagonal } from "./DiagonalCollection"
 import * as diag from "./DiagonalCollectionFcts"
-import { NegativeCCDiagonalCollection } from "./NegativeCCDiagonalCollection";
+import { NCCDiagonalCollection } from "./NegativeCCDiagonalCollection";
 
 /**
  * Suspension of N-diagonal.
@@ -10,25 +10,25 @@ import { NegativeCCDiagonalCollection } from "./NegativeCCDiagonalCollection";
  * @param N : Number of vertices
  * @returns ∑s
  */
-export function Sigma(s:NegativeCCDiagonalCollection):NegativeCCDiagonalCollection;
-export function Sigma(s:NegativeCCDiagonalCollection, power:number):NegativeCCDiagonalCollection;
+export function Sigma(s:NCCDiagonalCollection):NCCDiagonalCollection;
+export function Sigma(s:NCCDiagonalCollection, power:number):NCCDiagonalCollection;
 export function Sigma(s:Diagonal, N:number, power:number):Diagonal;
 export function Sigma(s:Diagonal, N:number):Diagonal;
-export function Sigma(s:NegativeCCDiagonalCollection | Diagonal, N?:number, power?:number):unknown{
-    if(N && !(s instanceof NegativeCCDiagonalCollection) && typeof N == "number"){
+export function Sigma(s:NCCDiagonalCollection | Diagonal, N?:number, power?:number):unknown{
+    if(N && !(s instanceof NCCDiagonalCollection) && typeof N == "number"){
         if(power === undefined){ power = 1 }
-        if(!(s instanceof NegativeCCDiagonalCollection)){
+        if(!(s instanceof NCCDiagonalCollection)){
             const n: Diagonal = [(s[0]+power) % N, (s[1]+power) % N];
             if(n[0]<n[1]){ return n; }
             return [n[1], n[0]];
         }
     }
-    if(s instanceof NegativeCCDiagonalCollection){
+    if(s instanceof NCCDiagonalCollection){
         const objs = []
         for(let diag of s.diagonals){
             objs.push(Sigma(diag, s.N, N)) // Notice N here is the power
         }
-        let a = new NegativeCCDiagonalCollection(objs, s.w, s.e)
+        let a = new NCCDiagonalCollection(objs, s.w, s.e)
         return a
     }
 }
@@ -144,8 +144,8 @@ export function ext(c: Diagonal, a:Diagonal, w:number, N:number){
 }
 
 
-export function extensionClose(A: NegativeCCDiagonalCollection){
-    let res: NegativeCCDiagonalCollection = new NegativeCCDiagonalCollection([...A.diagonals], A.w, A.e);
+export function extensionClose(A: NCCDiagonalCollection){
+    let res: NCCDiagonalCollection = new NCCDiagonalCollection([...A.diagonals], A.w, A.e);
     let somethingAdded: Boolean = false;
     while(true){
         somethingAdded = false;
@@ -164,7 +164,7 @@ export function extensionClose(A: NegativeCCDiagonalCollection){
 }
 
 
-export function randomSimpleMindedSystem2(w:number, e:number): NegativeCCDiagonalCollection{
+export function randomSimpleMindedSystem2(w:number, e:number): NCCDiagonalCollection{
     const N: number = (e+1) * (w+1) - 2;
 
     function getRandomInteger(min: number, max: number) {
@@ -225,11 +225,11 @@ export function randomSimpleMindedSystem2(w:number, e:number): NegativeCCDiagona
     }
 
     
-    return new NegativeCCDiagonalCollection([],w,e)
+    return new NCCDiagonalCollection([],w,e)
 }
 
 
-export function randomSimpleMindedSystem3(w:number, e:number): NegativeCCDiagonalCollection{
+export function randomSimpleMindedSystem3(w:number, e:number): NCCDiagonalCollection{
     const N: number = (e+1) * (w+1) - 2;
 
     function getRandomInteger(min: number, max: number) {
@@ -299,11 +299,11 @@ export function randomSimpleMindedSystem3(w:number, e:number): NegativeCCDiagona
         return [diag, ...helper(pol1, taken1), ...helper(pol2, taken2)]
     }
     let h = helper(numberArray(0,N-1), [])
-    return new NegativeCCDiagonalCollection(h,w,e)
+    return new NCCDiagonalCollection(h,w,e)
 }
 
 
-export function randomSimpleMindedSystem(w:number, e:number, num_attempts = 10): NegativeCCDiagonalCollection{
+export function randomSimpleMindedSystem(w:number, e:number, num_attempts = 10): NCCDiagonalCollection{
     const N: number = (e+1) * (w+1) - 2;
 
     function getRndInteger(min: number, max: number) {
@@ -323,7 +323,7 @@ export function randomSimpleMindedSystem(w:number, e:number, num_attempts = 10):
     }
     
     for(let i = 0; i < num_attempts; i++){
-        let sms = new NegativeCCDiagonalCollection(helper(0, N-1, true),w,e);
+        let sms = new NCCDiagonalCollection(helper(0, N-1, true),w,e);
         if(sms.isSimpleMindedSystem()){
             return sms;
         }
@@ -341,7 +341,7 @@ export function randomSimpleMindedSystem(w:number, e:number, num_attempts = 10):
  * @param B Collection of N-diagonals
  * @returns boolean
 */
-function isHomBetweenCollections(from: NegativeCCDiagonalCollection, to: NegativeCCDiagonalCollection): boolean{
+function isHomBetweenCollections(from: NCCDiagonalCollection, to: NCCDiagonalCollection): boolean{
     for(let x of from.diagonals){
         for(let y of to.diagonals){
             if(homDim(x, y, from.w, to.e) > 0){
@@ -353,8 +353,8 @@ function isHomBetweenCollections(from: NegativeCCDiagonalCollection, to: Negativ
 }
 
 // Need test
-export function isEn(coll: NegativeCCDiagonalCollection, n: number){
-    let a = new NegativeCCDiagonalCollection(coll.diagonals, coll.w, coll.e);
+export function isEn(coll: NCCDiagonalCollection, n: number){
+    let a = new NCCDiagonalCollection(coll.diagonals, coll.w, coll.e);
 
     for(let i = 0; i<n; i++){
         a = Sigma(a);
@@ -363,8 +363,8 @@ export function isEn(coll: NegativeCCDiagonalCollection, n: number){
     return true
 }
 
-export function extension(A: NegativeCCDiagonalCollection, B: NegativeCCDiagonalCollection): NegativeCCDiagonalCollection{
-    let a: NegativeCCDiagonalCollection = diag.union(A, B);
+export function extension(A: NCCDiagonalCollection, B: NCCDiagonalCollection): NCCDiagonalCollection{
+    let a: NCCDiagonalCollection = diag.union(A, B);
     
     for(let x of A.diagonals){
         for(let y of B.diagonals){
@@ -379,7 +379,7 @@ export function extension(A: NegativeCCDiagonalCollection, B: NegativeCCDiagonal
     return a;
 }
 
-export function leftPerp(of:NegativeCCDiagonalCollection, inColl:NegativeCCDiagonalCollection){
+export function leftPerp(of:NCCDiagonalCollection, inColl:NCCDiagonalCollection){
     return inColl.clone((diag) => {
         for(let ofDiag of of.diagonals){
             if(homDim(diag, ofDiag, inColl.w, inColl.e) > 0){
@@ -391,7 +391,7 @@ export function leftPerp(of:NegativeCCDiagonalCollection, inColl:NegativeCCDiago
 }
 
 // Set^perp
-export function rightPerp(of:NegativeCCDiagonalCollection, inColl:NegativeCCDiagonalCollection){
+export function rightPerp(of:NCCDiagonalCollection, inColl:NCCDiagonalCollection){
     return inColl.clone((diag) => {
         for(let ofDiag of of.diagonals){
             if(homDim(ofDiag, diag, inColl.w, inColl.e) > 0){
@@ -402,10 +402,10 @@ export function rightPerp(of:NegativeCCDiagonalCollection, inColl:NegativeCCDiag
     })
 }
 
-export function filtGen(set: NegativeCCDiagonalCollection, alg: NegativeCCDiagonalCollection){
+export function filtGen(set: NCCDiagonalCollection, alg: NCCDiagonalCollection){
     return leftPerp(rightPerp(set, alg), alg)
 }
 
-export function filtSub(set: NegativeCCDiagonalCollection, alg: NegativeCCDiagonalCollection){
+export function filtSub(set: NCCDiagonalCollection, alg: NCCDiagonalCollection){
     return rightPerp(leftPerp(set, alg), alg)
 }
