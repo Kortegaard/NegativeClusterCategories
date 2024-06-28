@@ -64,6 +64,10 @@ var NegativeCCDiagonalCollection = /** @class */ (function (_super) {
         }
         return true;
     };
+    // TODO
+    NegativeCCDiagonalCollection.prototype.isRigid = function () {
+        return false;
+    };
     // Could improve with a faster fail if not ext closed, by implementing ext clossure here
     NegativeCCDiagonalCollection.prototype.isExtensionClosed = function () {
         return this.equal(NCC.extensionClose(this));

@@ -8,5 +8,5 @@ function getPerf(fn, n) {
     return [t1 - t0, (t1-t0)/n];
 }
 
-//console.log(getPerf(() => nch.randomSimpleMindedSystem3(300,400), 10))
-console.log(getPerf(() => nch.randomSimpleMindedSystem(300,400,100000),  1))
+console.log(getPerf(() => nch.randomSimpleMindedSystem3(300,400), 10))
+//console.log(getPerf(() => nch.randomSimpleMindedSystem(300,400,100000),  1))

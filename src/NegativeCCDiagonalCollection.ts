@@ -4,7 +4,7 @@ import * as NCC from "./NCC"
 
 
 
-export class NegativeCCDiagonalCollection extends DiagonalCollection{
+export class NCCDiagonalCollection extends DiagonalCollection{
 
     w: number = 0;
     e: number = 0;
@@ -17,8 +17,8 @@ export class NegativeCCDiagonalCollection extends DiagonalCollection{
         this.N = (w+1)*(e+1)-2;
     }
 
-    clone(filter: (d:Diagonal) => boolean = () => { return true; }):NegativeCCDiagonalCollection{
-        return new NegativeCCDiagonalCollection([...this.diagonals].filter(filter), this.w, this.e);
+    clone(filter: (d:Diagonal) => boolean = () => { return true; }):NCCDiagonalCollection{
+        return new NCCDiagonalCollection([...this.diagonals].filter(filter), this.w, this.e);
     }
 
    isSimpleMindedSystem(){
@@ -39,6 +39,11 @@ export class NegativeCCDiagonalCollection extends DiagonalCollection{
         }
 
         return true;
+    }
+
+    // TODO
+    isRigid(){
+        return false;
     }
 
     // Could improve with a faster fail if not ext closed, by implementing ext clossure here
