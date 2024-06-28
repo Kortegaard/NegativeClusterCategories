@@ -1,46 +1,60 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## What is this?
 
-## Available Scripts
+This is intended to be a project that can help do calculations in negative cluster categories. 
+It is build using the combinarorial model describing such negative cluster categories, 
+which identifies indecomposable objects with admissible diagonals in an N-gon for a certain N. 
 
-In the project directory, you can run:
+### What can I do with this code?
 
-### `npm start`
+We will give some examples of things we can do, although this will _not_ be an exhaustive list of possible things.
+On single objects/diagonals we can do things such as
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- shift an object/diagonal,
+- calculate extensions between objects,
+- calculate the hom dimension between objects.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+However, most if not everything revolves around the class `NegativeCCDiagonalCollection` which, as the name sugests, is a collection of admissible diagonals. 
+which allows us to do the following:
 
-### `npm test`
+- extension-close a Diagonal collection
+- calculate extensions between collections,
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In case we want to operate on abelian subcategories of the negative cluster category, we can do the following
 
-### `npm run build`
+- find random simple minded systems,
+- close under subobjects
+- close under quotiens
+- close under extension
+- find random torsion classes or torsion-free classes
+- do HRS tilts.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Why Typescript?
+First of all, typescript is plenty fast to do the calculation I am in need of doing.
+The choice of typescript is mainly based on it being able to run in a webbrowser. 
+I had a hope to at one point create a website that can be used to interact with the code. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## Examples
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Tilt
+Say I want to find a proper abelian subcategory, and I want to do an HRS tilt at a random torsion pair, I might do the following
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+``` Typescript
+    let sms = nch.randomSimpleMindedSystem(w, e);
+    let alg = sms1?.extensionClose()
+    let torsFreeClass = alg.findRandomTorsionFreeClass(5);
+    let tiltedAlg = alg?.tilt(torsFreeClass!);
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Now I have two abelian categories that are 1 HRS tilt apart. I can now find their associated path algebra as follows
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+``` Typescript
+    let pathAlg = nch.pathAlgebraFromPasc(alg) as any[];
+    let pathAlgTilted = nch.pathAlgebraFromPasc(tiltedAlg) as any[];
+```
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Usage (TODO)
+- how to build
+- how to run
