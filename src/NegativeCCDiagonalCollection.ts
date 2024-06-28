@@ -41,6 +41,11 @@ export class NegativeCCDiagonalCollection extends DiagonalCollection{
         return true;
     }
 
+    // TODO
+    isRigid(){
+        return false;
+    }
+
     // Could improve with a faster fail if not ext closed, by implementing ext clossure here
     isExtensionClosed(){
         return this.equal(NCC.extensionClose(this))
