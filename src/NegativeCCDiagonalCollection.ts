@@ -2,8 +2,6 @@ import { DiagonalCollection, Diagonal } from "./DiagonalCollection"
 import { isCrossing } from "./DiagonalCollectionFcts";
 import * as NCC from "./NCC"
 
-
-
 export class NCCDiagonalCollection extends DiagonalCollection{
 
     w: number = 0;
@@ -41,12 +39,6 @@ export class NCCDiagonalCollection extends DiagonalCollection{
         return true;
     }
 
-    // TODO
-    isRigid(){
-        return false;
-    }
-
-    // Could improve with a faster fail if not ext closed, by implementing ext clossure here
     isExtensionClosed(){
         return this.equal(NCC.extensionClose(this))
     }

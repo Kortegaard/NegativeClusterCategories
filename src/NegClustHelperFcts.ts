@@ -553,7 +553,7 @@ export function pathAlgebra(sms: CwObjectCollection){
         }
     }
 
-    // Start composition list wiht arrows
+    // Start composition list with arrows
     var tempIndex = 0;
     for(var _i = 0; _i < arrows.length; _i++){
         let e1  = ext(sms.objectList[arrows[_i][0]], sms.objectList[arrows[_i][1]], sms.w, sms.N);

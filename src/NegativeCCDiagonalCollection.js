@@ -24,13 +24,13 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 exports.__esModule = true;
-exports.NegativeCCDiagonalCollection = void 0;
+exports.NCCDiagonalCollection = void 0;
 var DiagonalCollection_1 = require("./DiagonalCollection");
 var DiagonalCollectionFcts_1 = require("./DiagonalCollectionFcts");
 var NCC = require("./NCC");
-var NegativeCCDiagonalCollection = /** @class */ (function (_super) {
-    __extends(NegativeCCDiagonalCollection, _super);
-    function NegativeCCDiagonalCollection(objs, w, e) {
+var NCCDiagonalCollection = /** @class */ (function (_super) {
+    __extends(NCCDiagonalCollection, _super);
+    function NCCDiagonalCollection(objs, w, e) {
         var _this = _super.call(this, objs) || this;
         _this.w = 0;
         _this.e = 0;
@@ -40,11 +40,11 @@ var NegativeCCDiagonalCollection = /** @class */ (function (_super) {
         _this.N = (w + 1) * (e + 1) - 2;
         return _this;
     }
-    NegativeCCDiagonalCollection.prototype.clone = function (filter) {
+    NCCDiagonalCollection.prototype.clone = function (filter) {
         if (filter === void 0) { filter = function () { return true; }; }
-        return new NegativeCCDiagonalCollection(__spreadArray([], this.diagonals, true).filter(filter), this.w, this.e);
+        return new NCCDiagonalCollection(__spreadArray([], this.diagonals, true).filter(filter), this.w, this.e);
     };
-    NegativeCCDiagonalCollection.prototype.isSimpleMindedSystem = function () {
+    NCCDiagonalCollection.prototype.isSimpleMindedSystem = function () {
         for (var _i = 0; _i < this.diagonals.length; _i++) {
             if (this.diagonals[_i][1] <= this.diagonals[_i][0]) {
                 return false;
@@ -64,14 +64,9 @@ var NegativeCCDiagonalCollection = /** @class */ (function (_super) {
         }
         return true;
     };
-    // TODO
-    NegativeCCDiagonalCollection.prototype.isRigid = function () {
-        return false;
-    };
-    // Could improve with a faster fail if not ext closed, by implementing ext clossure here
-    NegativeCCDiagonalCollection.prototype.isExtensionClosed = function () {
+    NCCDiagonalCollection.prototype.isExtensionClosed = function () {
         return this.equal(NCC.extensionClose(this));
     };
-    return NegativeCCDiagonalCollection;
+    return NCCDiagonalCollection;
 }(DiagonalCollection_1.DiagonalCollection));
-exports.NegativeCCDiagonalCollection = NegativeCCDiagonalCollection;
+exports.NCCDiagonalCollection = NCCDiagonalCollection;

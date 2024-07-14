@@ -9,15 +9,15 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 exports.__esModule = true;
-exports.filtSub = exports.filtGen = exports.rightPerp = exports.leftPerp = exports.extension = exports.isEn = exports.randomSimpleMindedSystem = exports.randomSimpleMindedSystem3 = exports.randomSimpleMindedSystem2 = exports.extensionClose = exports.ext = exports.getDiagonalDifferenece = exports.isWDiagonal = exports.homDim = exports.Ndist = exports.isNOrdered = exports.Sigma = void 0;
+exports.tilt = exports.findRandomTorsionFreeClass = exports.filtSub = exports.filtGen = exports.rightPerp = exports.leftPerp = exports.extension = exports.isEn = exports.isHomBetweenCollections = exports.randomSimpleMindedSystem = exports.extensionClose = exports.ext = exports.getDiagonalDifferenece = exports.isWDiagonal = exports.homDim = exports.Ndist = exports.isNOrdered = exports.Sigma = void 0;
 var diag = require("./DiagonalCollectionFcts");
 var NegativeCCDiagonalCollection_1 = require("./NegativeCCDiagonalCollection");
 function Sigma(s, N, power) {
-    if (N && !(s instanceof NegativeCCDiagonalCollection_1.NegativeCCDiagonalCollection) && typeof N == "number") {
+    if (N && !(s instanceof NegativeCCDiagonalCollection_1.NCCDiagonalCollection) && typeof N == "number") {
         if (power === undefined) {
             power = 1;
         }
-        if (!(s instanceof NegativeCCDiagonalCollection_1.NegativeCCDiagonalCollection)) {
+        if (!(s instanceof NegativeCCDiagonalCollection_1.NCCDiagonalCollection)) {
             var n = [(s[0] + power) % N, (s[1] + power) % N];
             if (n[0] < n[1]) {
                 return n;
@@ -25,13 +25,13 @@ function Sigma(s, N, power) {
             return [n[1], n[0]];
         }
     }
-    if (s instanceof NegativeCCDiagonalCollection_1.NegativeCCDiagonalCollection) {
+    if (s instanceof NegativeCCDiagonalCollection_1.NCCDiagonalCollection) {
         var objs = [];
-        for (var _c = 0, _d = s.diagonals; _c < _d.length; _c++) {
-            var diag_1 = _d[_c];
+        for (var _a = 0, _b = s.diagonals; _a < _b.length; _a++) {
+            var diag_1 = _b[_a];
             objs.push(Sigma(diag_1, s.N, N)); // Notice N here is the power
         }
-        var a = new NegativeCCDiagonalCollection_1.NegativeCCDiagonalCollection(objs, s.w, s.e);
+        var a = new NegativeCCDiagonalCollection_1.NCCDiagonalCollection(objs, s.w, s.e);
         return a;
     }
 }
@@ -158,22 +158,23 @@ function ext(c, a, w, N) {
 }
 exports.ext = ext;
 function extensionClose(A) {
-    var res = new NegativeCCDiagonalCollection_1.NegativeCCDiagonalCollection(__spreadArray([], A.diagonals, true), A.w, A.e);
+    var res = new NegativeCCDiagonalCollection_1.NCCDiagonalCollection(__spreadArray([], A.diagonals, true), A.w, A.e);
     var somethingAdded = false;
     while (true) {
         somethingAdded = false;
-        for (var _c = 0, _d = res.diagonals; _c < _d.length; _c++) {
-            var x = _d[_c];
-            for (var _e = 0, _f = res.diagonals; _e < _f.length; _e++) {
-                var y = _f[_e];
+        for (var _a = 0, _b = res.diagonals; _a < _b.length; _a++) {
+            var x = _b[_a];
+            for (var _c = 0, _d = res.diagonals; _c < _d.length; _c++) {
+                var y = _d[_c];
                 if (x == y) {
                     continue;
                 }
                 var e = ext(x, y, A.w, A.N);
-                for (var _g = 0, e_1 = e; _g < e_1.length; _g++) {
-                    var z = e_1[_g];
+                for (var _e = 0, e_1 = e; _e < e_1.length; _e++) {
+                    var z = e_1[_e];
                     if (!res.contains(z)) {
                         res.add(z);
+                        somethingAdded = true;
                     }
                 }
             }
@@ -185,106 +186,49 @@ function extensionClose(A) {
     return res;
 }
 exports.extensionClose = extensionClose;
-function randomSimpleMindedSystem2(w, e) {
-    var N = (e + 1) * (w + 1) - 2;
-    function getRandomInteger(min, max) {
-        return Math.floor(Math.random() * (max + 1 - min)) + min;
-    }
-    function random_array_value(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-    }
-    function numberArray(from, to) {
-        return Array.from({ length: to - from + 1 }, function (_, index) { return index + from; });
-    }
-    var diagonals = [];
-    //should be tested. and by backwards, i meen counterclockwise
-    function NDistance(a, b, backwards) {
-        if (backwards === void 0) { backwards = false; }
-        if (!backwards) {
-            if (b >= a) {
-                return b - a;
-            }
-            if (b < a) {
-                return b + N - a;
-            }
-        }
-        if (backwards) {
-            if (b >= a) {
-                return a + N - b;
-            }
-            if (b < a) {
-                return a - b;
-            }
-        }
-    }
-    function helper(subpol_diag_indexes, backwards) {
-        if (subpol_diag_indexes.length == 0) {
-            var diag_start = getRandomInteger(0, N - 1);
-            var diag_end = (diag_start + (w + 1) * getRandomInteger(1, e)) % N; // Correct to choose e?
-            diagonals.push([diag_start, diag_end].sort(function (a, b) { return a - b; }));
-            helper([0], true);
-            helper([0], false);
-            return;
-        }
-        if (subpol_diag_indexes.length == 1) {
-            var dist = NDistance(diagonals[subpol_diag_indexes[0]][0], diagonals[subpol_diag_indexes[0]][1], backwards);
-            var num_avail = dist - 1;
-            if (num_avail <= w) {
-                return;
-            }
-            //need to be chosen smart, otherwise if not enough avail, a,b could both be 0
-            var diag_start = getRandomInteger(0, num_avail - 1);
-            var _a = -Math.floor((NDistance(diagonals[subpol_diag_indexes[0]][0], diag_start, backwards) - 2) / (w + 1));
-            var _b = Math.floor((NDistance(diag_start, diagonals[subpol_diag_indexes[0]][1], backwards) - 2) / (w + 1));
-            var diag_end_dir = getRandomInteger(_a + 1, _b);
-            if (diag_end_dir == 0) {
-                diag_end_dir = -1;
-            }
-            var diag_end = diag_start + diag_end_dir * (w + 1);
-            diagonals.push([diag_start, diag_end].sort(function (a, b) { return a - b; }));
-            helper([0, 1], !backwards);
-            //helper([1], )
-            return;
-        }
-    }
-    return new NegativeCCDiagonalCollection_1.NegativeCCDiagonalCollection([], w, e);
+function getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
 }
-exports.randomSimpleMindedSystem2 = randomSimpleMindedSystem2;
-function randomSimpleMindedSystem3(w, e) {
+function random_array_value(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+function numberArray(from, to) {
+    return Array.from({ length: to - from + 1 }, function (_, index) { return index + from; });
+}
+function random_shuffle(array) {
+    var _a;
+    var currentIndex = array.length;
+    var randomIndex;
+    while (currentIndex > 0) {
+        randomIndex = getRandomInteger(0, currentIndex);
+        currentIndex -= 1;
+        _a = [array[randomIndex], array[currentIndex]], array[currentIndex] = _a[0], array[randomIndex] = _a[1];
+    }
+    return array;
+}
+function randomSimpleMindedSystem(w, e) {
     var N = (e + 1) * (w + 1) - 2;
-    function getRandomInteger(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-    }
-    function random_array_value(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-    }
-    function numberArray(from, to) {
-        return Array.from({ length: to - from + 1 }, function (_, index) { return index + from; });
-    }
-    function random_shuffle(array) {
-        var _c;
-        var currentIndex = array.length;
-        var randomIndex;
-        while (currentIndex > 0) {
-            randomIndex = getRandomInteger(0, currentIndex);
-            currentIndex -= 1;
-            _c = [array[randomIndex], array[currentIndex]], array[currentIndex] = _c[0], array[randomIndex] = _c[1];
-        }
-        return array;
-    }
     function helper(polygon, taken) {
+        // checks if there is enoguh space to have a diagonal
         if (polygon.length < (w + 1) * 2 - 2) {
             return [];
         }
+        // Find all the vertices in `polygon` that are not already 
+        // enpoints of diagonals
         var available_nodes = random_shuffle(polygon.filter(function (d) { return taken.indexOf(d) == -1; }));
         if (available_nodes.length < 2) {
             return [];
         }
+        // Shuffles available vertices, to randomize pick of diagonal
         var randomized_available_nodes = random_shuffle(available_nodes);
         var random_partner = -1;
         var i = 0;
         var found_one = false;
+        // Goes throguh each of the available vertices, and try to match it 
+        // with another vertex to construct a diagonal
         for (i = 0; i < randomized_available_nodes.length; i++) {
+            // Find possible partners to construct a diagonal with 
+            // randomized_available_nodes[i]
             var possiblePartners = available_nodes.filter(function (n) {
                 if (n == randomized_available_nodes[i]) {
                     return false;
@@ -294,6 +238,7 @@ function randomSimpleMindedSystem3(w, e) {
             if (possiblePartners.length == 0) {
                 continue;
             }
+            // Picks a random partner
             found_one = true;
             random_partner = random_array_value(possiblePartners);
             break;
@@ -302,10 +247,13 @@ function randomSimpleMindedSystem3(w, e) {
             return [];
         }
         if (!found_one) {
-            console.log("sms, something wrong");
+            console.log("error: Diagonal not found");
             return [];
         }
+        // The chosen random diagonal
         var diag = [randomized_available_nodes[i], random_partner].sort(function (a, b) { return a - b; });
+        // Splitting the polygon up into two part, 
+        // one on each side of the diagonal
         var pol1 = polygon.filter(function (n) {
             return isNOrdered(diag[0], diag[1], n, N) || n == diag[0] || n == diag[1];
         });
@@ -316,38 +264,11 @@ function randomSimpleMindedSystem3(w, e) {
         });
         var taken2 = taken.filter(function (n) { return pol2.indexOf(n) >= 0; });
         taken2.push(diag[0], diag[1]);
+        // recursivly finding diagonal in the two parts the polygon is split into
         return __spreadArray(__spreadArray([diag], helper(pol1, taken1), true), helper(pol2, taken2), true);
     }
     var h = helper(numberArray(0, N - 1), []);
-    return new NegativeCCDiagonalCollection_1.NegativeCCDiagonalCollection(h, w, e);
-}
-exports.randomSimpleMindedSystem3 = randomSimpleMindedSystem3;
-function randomSimpleMindedSystem(w, e, num_attempts) {
-    if (num_attempts === void 0) { num_attempts = 10; }
-    var N = (e + 1) * (w + 1) - 2;
-    function getRndInteger(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-    }
-    function helper(start, end, first) {
-        if ((end - start + 1) < (w + 1)) {
-            return [];
-        }
-        var l = getRndInteger(start, start + w - 1);
-        if (first) {
-            l = 0;
-        }
-        var random_length = getRndInteger(1, Math.floor((end - l + 1) / (w + 1)) + 1) * (w + 1);
-        var endPoint = random_length - 1 + l;
-        return __spreadArray(__spreadArray([[l, endPoint]], helper(l + 1, endPoint - 1, false), true), helper(endPoint + 1, end, false), true);
-    }
-    for (var i = 0; i < num_attempts; i++) {
-        var sms = new NegativeCCDiagonalCollection_1.NegativeCCDiagonalCollection(helper(0, N - 1, true), w, e);
-        if (sms.isSimpleMindedSystem()) {
-            return sms;
-        }
-    }
-    console.log("NOT SMS");
-    return null;
+    return new NegativeCCDiagonalCollection_1.NCCDiagonalCollection(h, w, e);
 }
 exports.randomSimpleMindedSystem = randomSimpleMindedSystem;
 // Need test
@@ -359,10 +280,10 @@ exports.randomSimpleMindedSystem = randomSimpleMindedSystem;
  * @returns boolean
 */
 function isHomBetweenCollections(from, to) {
-    for (var _c = 0, _d = from.diagonals; _c < _d.length; _c++) {
-        var x = _d[_c];
-        for (var _e = 0, _f = to.diagonals; _e < _f.length; _e++) {
-            var y = _f[_e];
+    for (var _a = 0, _b = from.diagonals; _a < _b.length; _a++) {
+        var x = _b[_a];
+        for (var _c = 0, _d = to.diagonals; _c < _d.length; _c++) {
+            var y = _d[_c];
             if (homDim(x, y, from.w, to.e) > 0) {
                 return true;
             }
@@ -370,9 +291,10 @@ function isHomBetweenCollections(from, to) {
     }
     return false;
 }
+exports.isHomBetweenCollections = isHomBetweenCollections;
 // Need test
 function isEn(coll, n) {
-    var a = new NegativeCCDiagonalCollection_1.NegativeCCDiagonalCollection(coll.diagonals, coll.w, coll.e);
+    var a = new NegativeCCDiagonalCollection_1.NCCDiagonalCollection(coll.diagonals, coll.w, coll.e);
     for (var i = 0; i < n; i++) {
         a = Sigma(a);
         if (isHomBetweenCollections(a, coll)) {
@@ -384,17 +306,17 @@ function isEn(coll, n) {
 exports.isEn = isEn;
 function extension(A, B) {
     var a = diag.union(A, B);
-    for (var _c = 0, _d = A.diagonals; _c < _d.length; _c++) {
-        var x = _d[_c];
-        for (var _e = 0, _f = B.diagonals; _e < _f.length; _e++) {
-            var y = _f[_e];
+    for (var _a = 0, _b = A.diagonals; _a < _b.length; _a++) {
+        var x = _b[_a];
+        for (var _c = 0, _d = B.diagonals; _c < _d.length; _c++) {
+            var y = _d[_c];
             if (diag.diagonalEqual(x, y)) {
                 continue;
             }
             // Find e's such that: x ---> e ---> y, or rather a ---> e ---> b
             var e = ext(y, x, A.w, A.N);
-            for (var _g = 0, e_2 = e; _g < e_2.length; _g++) {
-                var z = e_2[_g];
+            for (var _e = 0, e_2 = e; _e < e_2.length; _e++) {
+                var z = e_2[_e];
                 if (!a.contains(z)) {
                     a.add(z);
                 }
@@ -406,8 +328,8 @@ function extension(A, B) {
 exports.extension = extension;
 function leftPerp(of, inColl) {
     return inColl.clone(function (diag) {
-        for (var _c = 0, _d = of.diagonals; _c < _d.length; _c++) {
-            var ofDiag = _d[_c];
+        for (var _a = 0, _b = of.diagonals; _a < _b.length; _a++) {
+            var ofDiag = _b[_a];
             if (homDim(diag, ofDiag, inColl.w, inColl.e) > 0) {
                 return false;
             }
@@ -419,8 +341,8 @@ exports.leftPerp = leftPerp;
 // Set^perp
 function rightPerp(of, inColl) {
     return inColl.clone(function (diag) {
-        for (var _c = 0, _d = of.diagonals; _c < _d.length; _c++) {
-            var ofDiag = _d[_c];
+        for (var _a = 0, _b = of.diagonals; _a < _b.length; _a++) {
+            var ofDiag = _b[_a];
             if (homDim(ofDiag, diag, inColl.w, inColl.e) > 0) {
                 return false;
             }
@@ -437,3 +359,15 @@ function filtSub(set, alg) {
     return rightPerp(leftPerp(set, alg), alg);
 }
 exports.filtSub = filtSub;
+function findRandomTorsionFreeClass(alg) {
+    var num = Math.floor(Math.random() * alg.diagonals.length + 1);
+    var shuffled = alg.diagonals.sort(function () { return 0.5 - Math.random(); });
+    var selected = shuffled.slice(0, num);
+    return filtSub(new NegativeCCDiagonalCollection_1.NCCDiagonalCollection(selected, alg.w, alg.e), alg);
+}
+exports.findRandomTorsionFreeClass = findRandomTorsionFreeClass;
+function tilt(alg, torsionFree) {
+    var torsion = leftPerp(torsionFree, alg);
+    return extension(Sigma(torsionFree), torsion);
+}
+exports.tilt = tilt;

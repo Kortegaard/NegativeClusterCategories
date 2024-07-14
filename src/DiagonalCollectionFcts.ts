@@ -54,7 +54,6 @@ export function intersect<T extends DiagonalCollection>(...args : T[]): T{
         }
         return true
     }) as T
-
 }
 
 

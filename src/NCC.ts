@@ -8,7 +8,7 @@ import { NCCDiagonalCollection } from "./NegativeCCDiagonalCollection";
  * 
  * @param s : N-Diagonal
  * @param N : Number of vertices
- * @returns ∑s
+ * @returns Sigma s (i.e. the suspension of s)
  */
 export function Sigma(s:NCCDiagonalCollection):NCCDiagonalCollection;
 export function Sigma(s:NCCDiagonalCollection, power:number):NCCDiagonalCollection;
@@ -102,7 +102,7 @@ export function homDim(s1:Diagonal, s2:Diagonal, w:number, e:number){
  * @returns {boolean}
  */
 export function isWDiagonal(a: Diagonal, w: number): boolean{
-    return (( (a[1] - a[0]) + 1 )% (w + 1)  == 0);
+    return (((a[1] - a[0]) + 1 )% (w + 1)  == 0);
 }
 
 // e's in article fig 11. 
@@ -154,7 +154,10 @@ export function extensionClose(A: NCCDiagonalCollection){
                 if(x == y){ continue; }
                 let e = ext(x, y, A.w, A.N);
                 for(let z of e){
-                    if(!res.contains(z)){ res.add(z); }
+                    if(!res.contains(z)){
+                        res.add(z); 
+                        somethingAdded = true; 
+                    }
                 }
             }
         }
@@ -163,127 +166,143 @@ export function extensionClose(A: NCCDiagonalCollection){
     return res;
 }
 
+                                                                                     
+                                        
 
-export function randomSimpleMindedSystem2(w:number, e:number): NCCDiagonalCollection{
-    const N: number = (e+1) * (w+1) - 2;
+                                                         
+                                                                 
+     
 
-    function getRandomInteger(min: number, max: number) {
-        return Math.floor(Math.random() * (max + 1 - min)) + min;
-    }
+                                            
+                                                          
+     
 
-    function random_array_value(arr: any[]){
-        return arr[Math.floor(Math.random() * arr.length)]
-    }
+                                                  
+                                                                          
+     
 
-    function numberArray(from: number, to:number){
-        return Array.from({length: to-from+1}, (_, index) => index + from)
-    }
-
-    const diagonals: Diagonal[] = [] 
+                                     
     
-    //should be tested. and by backwards, i meen counterclockwise
-    function NDistance(a: number, b: number, backwards: Boolean = false){
-        if(!backwards){
-            if(b>=a){ return b-a }
-            if(b<a) { return b+N - a}
-        }
-        if(backwards){
-            if(b>=a){ return a+N-b }
-            if(b<a) { return a-b }
-        }
-    }
+                                                                 
+                                                                         
+                       
+                                  
+                                     
+         
+                      
+                                    
+                                  
+         
+     
 
-    function helper(subpol_diag_indexes:number[] , backwards: Boolean){
-        if(subpol_diag_indexes.length == 0){
-            const diag_start = getRandomInteger(0, N-1);
-            const diag_end = (diag_start + (w+1) * getRandomInteger(1, e)) % N; // Correct to choose e?
-            diagonals.push([diag_start,diag_end].sort((a,b)=>{return a-b}) as Diagonal)
-            helper([0],true) 
-            helper([0],false) 
-            return;
-        }
-        if(subpol_diag_indexes.length == 1){
-            const dist = NDistance(diagonals[subpol_diag_indexes[0]][0],diagonals[subpol_diag_indexes[0]][1], backwards)
-            const num_avail = dist - 1;
-            if( num_avail <= w ){ return }
-            //need to be chosen smart, otherwise if not enough avail, a,b could both be 0
-            const diag_start = getRandomInteger(0,num_avail-1)
+                                                                       
+                                            
+                                                        
+                                                                                                       
+                                                                                       
+                             
+                              
+                   
+         
+                                            
+                                                                                                                        
+                                       
+                                          
+                                                                                         
+                                                              
 
-            const _a = -Math.floor((NDistance(diagonals[subpol_diag_indexes[0]][0], diag_start,backwards)-2)/(w+1))
-            const _b = Math.floor((NDistance(diag_start, diagonals[subpol_diag_indexes[0]][1],backwards)-2)/(w+1))
+                                                                                                                   
+                                                                                                                  
 
-            let diag_end_dir = getRandomInteger(_a+1,_b) 
-            if(diag_end_dir==0){ diag_end_dir = -1}
+                                                         
+                                                   
 
-            const diag_end = diag_start + diag_end_dir * (w+1)
-            diagonals.push([diag_start,diag_end].sort((a,b)=>{return a-b}) as Diagonal)
-            helper([0,1], !backwards)
-            //helper([1], )
-            return
-        }
+                                                              
+                                                                                       
+                                     
+                           
+                  
+         
 
-    }
-
+     
     
-    return new NCCDiagonalCollection([],w,e)
+                                            
+ 
+
+function getRandomInteger(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min)) + min;
 }
 
+function random_array_value(arr: any[]){
+    return arr[Math.floor(Math.random() * arr.length)]
+}
 
-export function randomSimpleMindedSystem3(w:number, e:number): NCCDiagonalCollection{
+function numberArray(from: number, to:number){
+    return Array.from({length: to-from+1}, (_, index) => index + from)
+}
+
+function random_shuffle(array: any[]) {
+    let currentIndex = array.length
+    let randomIndex: number;
+
+    while (currentIndex > 0) {
+        randomIndex = getRandomInteger(0, currentIndex)
+        currentIndex -= 1;
+
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+}
+
+export function randomSimpleMindedSystem(w:number, e:number): NCCDiagonalCollection{
     const N: number = (e+1) * (w+1) - 2;
 
-    function getRandomInteger(min: number, max: number) {
-        return Math.floor(Math.random() * (max - min)) + min;
-    }
-
-    function random_array_value(arr: any[]){
-        return arr[Math.floor(Math.random() * arr.length)]
-    }
-
-    function numberArray(from: number, to:number){
-        return Array.from({length: to-from+1}, (_, index) => index + from)
-    }
-
-    function random_shuffle(array) {
-        let currentIndex = array.length
-        let randomIndex: number;
-      
-        while (currentIndex > 0) {
-          randomIndex = getRandomInteger(0, currentIndex)
-          currentIndex -= 1;
-      
-          [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-        }
-      
-        return array;
-      }
-      
     function helper(polygon: number[], taken: number[]){
+        // checks if there is enoguh space to have a diagonal
         if(polygon.length < (w+1)*2-2){ return [] }
+        
+        // Find all the vertices in `polygon` that are not already 
+        // enpoints of diagonals
         let available_nodes = random_shuffle(polygon.filter((d) => taken.indexOf(d) == -1))
         if(available_nodes.length < 2){ return [] }
+
+        // Shuffles available vertices, to randomize pick of diagonal
         let randomized_available_nodes = random_shuffle(available_nodes)
         let random_partner:number = -1
+
         let i = 0
         let found_one = false
+
+        // Goes throguh each of the available vertices, and try to match it 
+        // with another vertex to construct a diagonal
         for (i = 0; i < randomized_available_nodes.length; i++) {
+            // Find possible partners to construct a diagonal with 
+            // randomized_available_nodes[i]
             let possiblePartners = available_nodes.filter((n) => {
                 if(n == randomized_available_nodes[i]){ return false }
                 return (Math.abs(n-randomized_available_nodes[i]) + 1) % (w + 1) == 0
             })
             if(possiblePartners.length == 0){ continue }
+    
+            // Picks a random partner
             found_one = true
             random_partner = random_array_value(possiblePartners)
             break
         }
+
         if(random_partner == -1){ return []}
         if(!found_one){
-            console.log("sms, something wrong")
+            console.log("error: Diagonal not found")
             return []
         }
 
+        // The chosen random diagonal
         let diag = [randomized_available_nodes[i], random_partner].sort((a, b)=>{return a-b})
 
+
+        // Splitting the polygon up into two part, 
+        // one on each side of the diagonal
         const pol1 = polygon.filter((n) => {
             return isNOrdered(diag[0], diag[1],n, N) || n == diag[0] || n ==diag[1]
         })
@@ -296,42 +315,25 @@ export function randomSimpleMindedSystem3(w:number, e:number): NCCDiagonalCollec
         const taken2 = taken.filter((n) => { return pol2.indexOf(n)>=0 })
         taken2.push(diag[0], diag[1])
 
+        // recursivly finding diagonal in the two parts the polygon is split into
         return [diag, ...helper(pol1, taken1), ...helper(pol2, taken2)]
     }
+
     let h = helper(numberArray(0,N-1), [])
     return new NCCDiagonalCollection(h,w,e)
 }
 
 
-export function randomSimpleMindedSystem(w:number, e:number, num_attempts = 10): NCCDiagonalCollection{
-    const N: number = (e+1) * (w+1) - 2;
 
-    function getRndInteger(min: number, max: number) {
-        return Math.floor(Math.random() * (max - min)) + min;
-    }
 
-    function helper(start:number, end:number, first:boolean):[number, number][]{
-        if((end - start + 1) < (w+1)){
-            return []
-        }
-        let l = getRndInteger(start, start + w - 1 );
-        if(first){ l = 0; }
-        const random_length = getRndInteger(1, Math.floor((end-l+1)/(w+1))+1)*(w+1);
 
-        const endPoint = random_length-1+l;
-        return [[l, endPoint],...helper(l+1,endPoint - 1, false), ...helper(endPoint + 1, end, false)];
-    }
-    
-    for(let i = 0; i < num_attempts; i++){
-        let sms = new NCCDiagonalCollection(helper(0, N-1, true),w,e);
-        if(sms.isSimpleMindedSystem()){
-            return sms;
-        }
-    }
 
-    console.log("NOT SMS")
-    return null;
-}
+
+
+
+
+
+
 
 // Need test
 /**
@@ -341,7 +343,7 @@ export function randomSimpleMindedSystem(w:number, e:number, num_attempts = 10):
  * @param B Collection of N-diagonals
  * @returns boolean
 */
-function isHomBetweenCollections(from: NCCDiagonalCollection, to: NCCDiagonalCollection): boolean{
+export function isHomBetweenCollections(from: NCCDiagonalCollection, to: NCCDiagonalCollection): boolean{
     for(let x of from.diagonals){
         for(let y of to.diagonals){
             if(homDim(x, y, from.w, to.e) > 0){
@@ -409,3 +411,37 @@ export function filtGen(set: NCCDiagonalCollection, alg: NCCDiagonalCollection){
 export function filtSub(set: NCCDiagonalCollection, alg: NCCDiagonalCollection){
     return rightPerp(leftPerp(set, alg), alg)
 }
+
+
+
+
+
+
+
+
+
+
+
+export function findRandomTorsionFreeClass(alg: NCCDiagonalCollection){
+    const num = Math.floor(Math.random() * alg.diagonals.length  + 1)
+    const shuffled = alg.diagonals.sort(() => 0.5 - Math.random());
+    let selected = shuffled.slice(0, num);
+    return filtSub(new NCCDiagonalCollection(selected, alg.w, alg.e), alg)
+}
+
+
+
+
+
+
+
+
+
+export function tilt(alg:NCCDiagonalCollection, torsionFree:NCCDiagonalCollection){
+    let torsion = leftPerp(torsionFree, alg)
+    return extension(Sigma(torsionFree), torsion);
+}
+
+
+
+

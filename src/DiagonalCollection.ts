@@ -45,21 +45,8 @@ export class DiagonalCollection{
         }
         return -1;
     }
-//
-//    removeIndex(index: number){ }
-//
-//    removeObject(index: number){ }
 
     equal(A: DiagonalCollection){
         return this.containsSet(A.diagonals) && A.containsSet(this.diagonals);
-    }
-
-    isExtensionClosed(){
-        return this.equal(this.extensionClose());
-    }
-
-    extensionClose(){
-        console.warn("Not implemented! Not relavant now")
-        return null;
     }
 }

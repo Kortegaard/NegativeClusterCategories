@@ -53,17 +53,8 @@ var DiagonalCollection = /** @class */ (function () {
         }
         return -1;
     };
-    DiagonalCollection.prototype.removeIndex = function (index) { };
-    DiagonalCollection.prototype.removeObject = function (index) { };
     DiagonalCollection.prototype.equal = function (A) {
         return this.containsSet(A.diagonals) && A.containsSet(this.diagonals);
-    };
-    DiagonalCollection.prototype.isExtensionClosed = function () {
-        return this.equal(this.extensionClose());
-    };
-    DiagonalCollection.prototype.extensionClose = function () {
-        console.warn("Not implemented! Not relavant now");
-        return null;
     };
     return DiagonalCollection;
 }());
