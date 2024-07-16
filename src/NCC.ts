@@ -57,11 +57,11 @@ export function isNOrdered(n1: number, n2: number, n3: number, N: number): Boole
  * @returns {number} Distance as described above.
  */
 export function Ndist(a:number,b:number, N:number){
-    if(b == a){ return 0}
     if(b > a){ return b-a }
     if(b < a){ return N - a + b }
-    return -1;
+    return 0;
 }
+
 
 /**
  * Calculates k dimension of hom space hom(s1,s2) in C_{-w}(A_e).
