@@ -2,13 +2,10 @@
 export type Diagonal = [number, number]
 
 export class DiagonalCollection{
-
     diagonals: Diagonal[] = [];
 
     constructor(objs: Diagonal[]){
-        for(var k of objs){
-            this.add(k);
-        }
+        for(var k of objs){ this.add(k); }
     }
 
     clone(filter: (d:Diagonal) => boolean = () => { return true; }){

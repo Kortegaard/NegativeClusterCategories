@@ -270,7 +270,6 @@ export function randomSimpleMindedSystem(w:number, e:number): NCCDiagonalCollect
         // Shuffles available vertices, to randomize pick of diagonal
         let randomized_available_nodes = random_shuffle(available_nodes)
         let random_partner:number = -1
-
         let i = 0
         let found_one = false
 
@@ -300,7 +299,6 @@ export function randomSimpleMindedSystem(w:number, e:number): NCCDiagonalCollect
         // The chosen random diagonal
         let diag = [randomized_available_nodes[i], random_partner].sort((a, b)=>{return a-b})
 
-
         // Splitting the polygon up into two part, 
         // one on each side of the diagonal
         const pol1 = polygon.filter((n) => {
@@ -322,6 +320,8 @@ export function randomSimpleMindedSystem(w:number, e:number): NCCDiagonalCollect
     let h = helper(numberArray(0,N-1), [])
     return new NCCDiagonalCollection(h,w,e)
 }
+
+
 
 
 
